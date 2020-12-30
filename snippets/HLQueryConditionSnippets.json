@@ -1,0 +1,221 @@
+{
+  "HL Create QueryConditions Input Config": {
+    "prefix": "HLCreateQCInputConfig",
+    "body": [
+      "{",
+      "    container: {",
+      "        width: 220,",
+      "        position: '${1|left,content|}',",
+      "        component: {",
+      "            label: '${2:queryLabel}：',",
+      "            type: 'text',",
+      "            JsonProperty: {",
+      "                name: '${3}',",
+      "                queryPrams: '${3}',",
+      "            },",
+      "            defaultValue: '',",
+      "            props: {",
+      "                placeholder: '请输入${2}',",
+      "                width: 150,",
+      "                maxLength: '${4}',",
+      "            },",
+      "        },",
+      "    },",
+      "},"
+    ],
+    "description": "HL Create QueryConditions Input Config"
+  },
+
+  "HL Create QueryConditions InputNumber Config": {
+    "prefix": "HLCreateQCInputNumberConfig",
+    "body": [
+      "{",
+      "    container: {",
+      "        width: 220,",
+      "        position: '${1|left,content|}',",
+      "        component: {",
+      "            label: '${2:queryLabel}：',",
+      "            type: 'number',",
+      "            JsonProperty: {",
+      "                name: '${3}',",
+      "                queryPrams: '${3}',",
+      "            },",
+      "            defaultValue: '',",
+      "            props: {",
+      "                placeholder: '请输入${2}',",
+      "                width: 150,",
+      "                maxLength: '${4}',",
+      "            },",
+      "        },",
+      "    },",
+      "},"
+    ],
+    "description": "HL Create QueryConditions InputNumber Config"
+  },
+
+  "HL Create QueryConditions TextArea Config": {
+    "prefix": "HLCreateQCTextAreaConfig",
+    "body": [
+      "{",
+      "    container: {",
+      "        width: 220,",
+      "        position: '${1|left,content|}',",
+      "        component: {",
+      "            label: '${2:queryLabel}：',",
+      "            type: 'textArea',",
+      "            JsonProperty: {",
+      "                name: '${3}',",
+      "                queryPrams: '${3}',",
+      "            },",
+      "            defaultValue: '',",
+      "            props: {",
+      "                placeholder: '请输入${2}',",
+      "                width: 150,",
+      "                maxLength: '${4}',",
+      "            },",
+      "        },",
+      "    },",
+      "},"
+    ],
+    "description": "HL Create QueryConditions TextArea Config"
+  },
+
+  "HL Create QueryConditions Select Config": {
+    "prefix": "HLCreateQCSelectConfig",
+    "body": [
+      "{",
+      "    container: {",
+      "        width: 220,",
+      "        position: '${1|left,content|}',",
+      "        component: {",
+      "            label: '${2:queryLabel}：',",
+      "            type: 'select',",
+      "            JsonProperty: {",
+      "                name: '${3}',",
+      "                queryPrams: '${3}',",
+      "            },",
+      "            data: [{ key: '', value: '全部' }],",
+      "            defaultValue: '',",
+      "            props: {",
+      "                placeholder: '请输入${2}',",
+      "                width: 150,",
+      "            },",
+      "        },",
+      "        ",
+      "    },",
+      "},"
+    ],
+    "description": "HL Create QueryConditions Select Config"
+  },
+
+  "HL Create QueryConditions RadioButton Config": {
+    "prefix": "HLCreateQCRadioButtonConfig",
+    "body": [
+      "{",
+      "    container: {",
+      "        width: 220,",
+      "        position: '${1|left,content|}',",
+      "        component: {",
+      "            label: '${2:queryLabel}：',",
+      "            type: 'radioButton',",
+      "            JsonProperty: {",
+      "                name: '${3}',",
+      "                queryPrams: '${3}',",
+      "            },",
+      "            data: [{ label: '全部', value: '' }],",
+      "            defaultValue: '',",
+      "            props: {",
+      "                placeholder: '请输入${2}',",
+      "                width: 150,",
+      "            },",
+      "        },",
+      "        ",
+      "    },",
+      "},"
+    ],
+    "description": "HL Create QueryConditions RadioButton Config"
+  },
+
+  "HL Create QueryConditions CheckBox Config": {
+    "prefix": "HLCreateQCCheckBoxConfig",
+    "body": [
+      "{",
+      "    container: {",
+      "        width: 220,",
+      "        position: '${1|left,content|}',",
+      "        component: {",
+      "            label: '${2:queryLabel}：',",
+      "            type: 'checkBox',",
+      "            JsonProperty: {",
+      "                name: '${3}',",
+      "                queryPrams: '${3}',",
+      "            },",
+      "            defaultValue: ${4|false,true|},",
+      "            props: {",
+      "                placeholder: '请输入${2}',",
+      "                width: 150,",
+      "            },",
+      "        },",
+      "        ",
+      "    },",
+      "},"
+    ],
+    "description": "HL Create QueryConditions CheckBox Config"
+  },
+
+  "HL Create QueryConditions Date Config": {
+    "prefix": "HLCreateQCDateConfig",
+    "body": [
+      "{",
+      "    container: {",
+      "        width: 220,",
+      "        position: '${1|left,content|}',",
+      "        component: {",
+      "            label: '${2:queryLabel}：',",
+      "            type: 'date',",
+      "            JsonProperty: {",
+      "                name: '${3}',",
+      "                queryPrams: '${3}',",
+      "            },",
+      "            defaultValue: ''",
+      "            props: {",
+      "                placeholder: '请输入${2}',",
+      "                width: 150,",
+      "            },",
+      "        },",
+      "    },",
+      "},"
+    ],
+    "description": "HL Create QueryConditions DatePicker Config"
+  },
+
+  "HL Create QueryConditions DatePicker Config": {
+    "prefix": "HLCreateQCDatePickerConfig",
+    "body": [
+      "{",
+      "    container: {",
+      "        width: 220,",
+      "        position: '${1|left,content|}',",
+      "        component: {",
+      "            label: '${2:queryLabel}：',",
+      "            type: 'daterange',",
+      "            JsonProperty: {",
+      "                name: '${3}',",
+      "                queryPrams: '${3}',",
+      "            },",
+      "            defaultValue: [",
+      "                new moment(Date.parse(new Date().toString()) - 0),",
+      "                new moment(Date.parse(new Date().toString())),",
+      "            ],",
+      "            props: {",
+      "                placeholder: '请输入${2}',",
+      "                width: 150,",
+      "            },",
+      "        },",
+      "    },",
+      "},"
+    ],
+    "description": "HL Create QueryConditions DatePicker Config"
+  }
+
+}

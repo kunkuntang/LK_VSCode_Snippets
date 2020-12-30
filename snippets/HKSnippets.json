@@ -1,0 +1,47 @@
+{
+  "Create Lk Get Service": {
+    "prefix": "LkCreateGetService",
+    "body": [
+      "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
+      "  return get('${2:url}', params).then((res) => {",
+      "      return new ${3:ContainerEntity}(res);",
+      "  });",
+      "}"
+    ],
+    "description": "Create Lk Get Service"
+  },
+  "Create Lk Post Service": {
+    "prefix": "LkCreatePostService",
+    "body": [
+      "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
+      "  return post('${3:url}', params).then((res) => {",
+      "      return new ${4:ContainerEntity}(res);",
+      "  });",
+      "}"
+    ],
+    "description": "Create Lk Post Service"
+  },
+  "HLCreate FormSubmit Snippets": {
+    "prefix": "HLCreateFormSubmitSnippets",
+    "body": [
+      "this.${1:formRef}.viewModel.form.validateFields((err, values: ${2:接口数据模型对象) => {",
+      "  if (!err) {",
+      "    const formData = this.${1:formRef}.viewModel.InputDataModel as ${3:表单字段数据模型对象};",
+      "    const addParams = BaseFormFields.formFieldsToData<${3:表单字段数据模型对象}, ${2:接口数据模型对象>(${3:表单字段数据模型对象}, formData)",
+      "    // 调用接口",
+      "    ${0}",
+      "  }",
+      "})"
+    ],
+    "description": "HLCreate FormSubmit Snippets"
+  },
+  "HLCreate Enum Snippets": {
+    "prefix": "LkCreateEnumSnippets",
+    "body": [
+      "export class ${1:EnumName} extends BaseEnum<${2:codeType}, ${3:valueType}> {",
+      "  static ${4:EnumProperty} = new BaseEnum(${5:code}, ${6:value});",
+      "}"
+    ],
+    "description": "LkCreate Enum Snippets"
+  }
+}

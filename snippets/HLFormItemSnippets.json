@@ -1,0 +1,291 @@
+{
+  "Create HL Input FormItem": {
+    "prefix": "HLCreateInputFormItem",
+    "body": [
+      "${1:formUtils}.renderInputConfig({",
+      "    iAntdProps: ${1}.createAntdProps('${2:name}', ${3|1,2,3,4|}, '请输入${4}'),",
+      "    iFormProps: {",
+      "        ...${1}.createLayout('${4:label}', 8, 2 * 8),",
+      "        type: 'text',",
+      "        maxLength: '128',",
+      "    },",
+      "    rules: ${5:rules}.${2},",
+      "})"
+    ],
+    "description": "Create HL Input FormItem"
+  },
+
+  "Create HL NumberInput FormItem": {
+    "prefix": "HLCreateNumberInputFormItem",
+    "body": [
+      "${1:formUtils}.renderInputConfig({",
+      "    iAntdProps: ${1}.createAntdProps('${2:name}', ${3|1,2,3,4|}, '请输入${4}'),",
+      "    iFormProps: {",
+      "        ...${1}.createLayout('${4:label}', 8, 2 * 8),",
+      "        type:'number',",
+      "    },",
+      "    rules: ${5:rules}.${2},",
+      "})"
+    ],
+    "description": "Create HL NumberInput FormItem"
+  },
+
+  "Create HL TextArea FormItem": {
+    "prefix": "HLCreateTextAreaFormItem",
+    "body": [
+      "${1:formUtils}.renderInputConfig({",
+      "    iAntdProps: ${1}.createAntdProps('${2:name}', ${3|1,2,3,4|}, '请输入${4}'),",
+      "    iFormProps: {",
+      "        ...${1}.createLayout('${4:label}', 8, 2 * 8),",
+      "        type:'textarea',",
+      "        autosize: { minRows: 1,maxRows: 1 },",
+      "    },",
+      "    rules: ${5:rules}.${2},",
+      "})"
+    ],
+    "description": "Create HL TextArea FormItem"
+  },
+
+  "Create HL Radio Button FormItem": {
+    "prefix": "HLCreateRadioButtonFormItem",
+    "body": [
+      "${1:formUtils}.renderRadioButtonConfig({",
+      "    iAntdProps: ${1}.createAntdProps('${2:name}', ${3|1,2,3,4|}, '请输入${4}'),",
+      "    iFormProps: {",
+      "      ...${1}.createLayout('${4:label}', 8, 2 * 8),",
+      "      radioButton: {",
+      "          options: [",
+      "              {",
+      "                  label: '',",
+      "                  value: '',",
+      "                  disabled: false,",
+      "              },",
+      "          ]",
+      "      }",
+      "    },",
+      "    rules: ${5:rules}.${2},",
+      "})"
+    ],
+    "description": "Create HL Radio Button FormItem"
+  },
+
+  "Create HL Radio Group FormItem": {
+    "prefix": "HLCreateRadioGroupFormItem",
+    "body": [
+      "formUtils.renderCustomConfig({",
+      "    iAntdProps: formUtils.createAntdProps('${1:name}', 1, ''),",
+      "    iFormProps: {",
+      "        render: (form, antdProps, rule, formRef) => {",
+      "            return (",
+      "                <HLFormItem",
+      "                    form={form}",
+      "                    itemName=\"${1}\"",
+      "                    rules={rules.${1}}",
+      "                    label={'${2:labelName}'}",
+      "                    labelCol={{ span: 8 }}",
+      "                    wrapperCol={{ span: 16 }}",
+      "                    className=\"form-item-default\">",
+      "                    <RadioGroup",
+      "                        options={[",
+      "                            {",
+      "                                label: '全部',",
+      "                                value: '',",
+      "                                disabled: false,",
+      "                            },",
+      "                        ]}",
+      "                        value={formRef.viewModel.InputDataModel['${1}']['value']}",
+      "                        onChange={value => {",
+      "                            formRef.store.updateFormInputData( formRef.uid, { ${1}: { value } }, this);",
+      "                        }}",
+      "                    />",
+      "                </HLFormItem>",
+      "            );",
+      "        },",
+      "    },",
+      "});"
+    ],
+    "description": "Create HL Radio Group FormItem"
+  },
+
+  "Create HL Checkbox Group FormItem": {
+    "prefix": "HLCreateCheckboxGroupFormItem",
+    "body": [
+      "formUtil.renderCustomConfig({",
+      "    iAntdProps: {",
+      "        ...formUtil.createAntdProps('${1:name}', 4),",
+      "        span: 24,",
+      "    },",
+      "    iFormProps: {",
+      "        render: (form, iAntdProps, rule, formRef) => {",
+      "            return (",
+      "                <HLFormItem",
+      "                    form={form}",
+      "                    itemName=\"${1}\"",
+      "                    rules={rules.${1}}",
+      "                    label={'${2:labelName}'}",
+      "                    {...deliveryWaryColConfig}",
+      "                    className=\"form-item-default\">",
+      "                    <CheckboxGroup",
+      "                        options={[",
+      "                            { value: '', label: '全部' },",
+      "                        ]}",
+      "                        value={formRef.viewModel.InputDataModel['${1}']['value']}",
+      "                        onChange={e => {",
+      "                            formRef.store.updateFormInputData( formRef.uid, { ${1}: { value: e } }, this);",
+      "                        }}",
+      "                    />",
+      "                </HLFormItem>",
+      "            );",
+      "        },",
+      "    },",
+      "});"
+    ],
+    "description": "Create HL Checkbox Group FormItem"
+  },
+
+  "Create HL Switch FormItem": {
+    "prefix": "HLCreateSwitchFormItem",
+    "body": [
+      "${1:formUtils}.renderSwitchConfig({",
+      "    iAntdProps: ${1}.createAntdProps('${2:name}', ${3|1,2,3,4|}, '请输入${4}'),",
+      "    iFormProps: {",
+      "        ...${1}.createLayout('${4:label}', 8, 2 * 8),",
+      "        onChange: (${5:value}) => {",
+      "            ${0}",
+      "        },",
+      "    },",
+      "    rules: ${6:rules}.${2},",
+      "})"
+    ],
+    "description": "Create HL Switch FormItem"
+  },
+
+  "Create HL DatePicker FormItem": {
+    "prefix": "HLCreateDatePickerFormItem",
+    "body": [
+      "${1:formUtils}.renderDatePickerConfig({",
+      "    iAntdProps: ${1}.createAntdProps('${2:name}', ${3|1,2,3,4|}, '请输入${4}'),",
+      "    iFormProps: {",
+      "        ...${1}.createLayout('${4:label}', 8, 2 * 8),",
+      "        format:'YYYY-MM-DD HH:mm:ss', ",
+      "    },",
+      "    rules: ${5:rules}.${2},",
+      "})"
+    ],
+    "description": "Create HL DatePicker FormItem"
+  },
+
+  "Create HL Select FormItem": {
+    "prefix": "HLCreateSelectFormItem",
+    "body": [
+      "${1:formUtils}.renderSelectConfig({",
+      "    iAntdProps: ${1}.createAntdProps('${2:name}', ${3|1,2,3,4|}, '请输入${4}'),",
+      "    iFormProps: {",
+      "        ...${1}.createLayout('${4:label}', 8, 2 * 8),",
+      "        allowClear: true,",
+      "        options: [",
+      "          {",
+      "            value: '',",
+      "            key: '',",
+      "          }",
+      "        ],",
+      "        mode: 'combobox',",
+      "    },",
+      "    rules: ${5:rules}.${2},",
+      "})"
+    ],
+    "description": "Create HL Select FormItem"
+  },
+
+  "Create HL Search Select FormItem": {
+    "prefix": "HLCreateSearchSelectFormItem",
+    "body": [
+      "${1:formUtils}.renderSelectConfig({",
+      "    iAntdProps: ${1}.createAntdProps('${2:name}', ${3|1,2,3,4|}, '请输入${4}'),",
+      "    iFormProps: {",
+      "        ...${1}.createLayout('${4:label}', 8, 2 * 8),",
+      "        allowClear: true,",
+      "        pageSize: ${5:10},",
+      "        total: ${6:0},",
+      "        autoQuery: {",
+      "            ApiUrl: ${7:''},",
+      "            method: '${8|get,post|}',",
+      "            params: (pageIndex,pageSize,keywords) => {",
+      "                // 返回接口需要的参数对象",
+      "                return {",
+      "                  pageIndex,",
+      "                  pageSize,",
+      "                }",
+      "            },",
+      "            model: ${9:SearchEntity},",
+      "            token: ${10:DevToken},",
+      "            transform: (value:observablePromise.PramsResult<${9}>) => {",
+      "                let arr = value.value?value.value.result.data:[]",
+      "                return {",
+      "                    data: [{",
+      "                        key: '',",
+      "                        value: '',",
+      "                    }],",
+      "                    total: 0,",
+      "                }",
+      "            },",
+      "        },",
+      "        onPagingQuery: (pageIndex,pageSize,keywords) => {},",
+      "        onSearch: (val) => {},",
+      "        onFocus: () => {},",
+      "        paging: true,",
+      "        mode: '${11|default,combobox,multiple,tags|}',",
+      "        labelInValue: false,",
+      "        options: [],",
+      "    },",
+      "    rules: ${12:rules}.${2},",
+      "})"
+    ],
+    "description": "Create HL Search Select FormItem"
+  },
+
+  "Create HL Upload FormItem": {
+    "prefix": "HLCreateUploadFormItem",
+    "body": [
+      "${1:formUtils}.renderUploadConfig({",
+      "    iAntdProps: ${1}.createAntdProps('${2:name}', ${3|1,2,3,4|}, '请输入${4}'),",
+      "    iFormProps: {",
+      "        ...${1}.createLayout('${4:label}', 8, 2 * 8),",
+      "        action: `${5}`,",
+      "        headers: {${6}},",
+      "        name: '${7}',",
+      "        data: {${8}},",
+      "        maxFileCount: ${5:1},",
+      "        isDragger: ${6|true,false|},",
+      "        prompt: '',",
+      "    },",
+      "    rules: ${7:rules}.${2},",
+      "})"
+    ],
+    "description": "Create HL Upload FormItem"
+  },
+
+  "Create HL Custom FormItem": {
+    "prefix": "HLCreateCustomFormItem",
+    "body": [
+      "${1:formUtils}.renderCustomConfig({",
+      "    iAntdProps: ${1}.createAntdProps('${2:name}', ${3|1,2,3,4|}, ''),",
+      "    iFormProps: {",
+      "      render: (form,antdProps,rules,formRef) => {",
+      "          const exampleInput = ${1}.renderInputConfig({",
+      "              iAntdProps: ${1}.createAntdProps('customRenderInput1',null,'自定义文本组件'),",
+      "              iFormProps: {",
+      "                  ...${1}.createLayout('自定义组件',4,2 * 9),",
+      "                  type:'text',",
+      "              },",
+      "          })",
+      "          return ${1}.createFormComponent(exampleInput,form,formRef.uid,formRef)",
+      "      },",
+      "    },",
+      "    rules: ${4:rules}.${2},",
+      "})"
+    ],
+    "description": "Create HL Custom FormItem"
+  }
+
+}

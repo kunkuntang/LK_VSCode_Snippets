@@ -1,0 +1,232 @@
+{
+  "LK Create Page Component": {
+    "prefix": "LkFormComponent",
+    "body": [
+      "<LkFormAntdv",
+      "  on={{ onReady: (form: WrappedFormUtils) => (this.${1:FormName}Ref = form) }}",
+      "  formElementConfig={new ${1}FormItemFactory(this).FormItemConfig}",
+      "  config={this.${1}Config}",
+      "  formCreateConfig={this.${1}CreateConfig}",
+      "  data={this.${1}FormData}",
+      "></LkFormAntdv>"
+    ],
+    "description": "Lk Create Form Component"
+  },
+  "HL Create Modal Component": {
+    "prefix": "HLComponentModal",
+    "body": [
+      "<HLModal onReady={(instance) => {",
+      "    const modalWidth = 800;",
+      "    instance.viewModel.title = '${1:modalTitle}'",
+      "    instance.viewModel.width = modalWidth",
+      "    this.${2:modalRef} = instance;",
+      "}}>",
+      "    ${0}",
+      "</HLModal>"
+    ],
+    "description": "HL Create Modal Component"
+  },
+
+  "HL Create QRCoe Component": {
+    "prefix": "HLComponentQRCoe",
+    "body": [
+      "<HLQRCode",
+      "    size={${1:128}}",
+      "    value=\"${2:QRCodeValue}\"",
+      "    image=\"${3:QRCodeIconUrl}\"",
+      "    imageWidth={${4:50}}",
+      "    imageHeight={${5:50}}",
+      "/>",
+      ""
+    ],
+    "description": "HL Create QRCoe Component"
+  },
+
+  "HL Create Table Component": {
+    "prefix": "HLComponentTable",
+    "body": [
+      "<HLTable",
+      "    onReady={(instance) => {",
+      "        instance.viewModel.isAdaptiveHeight = true;",
+      "        instance.viewModel.bodyExternalContainer.set('ButtonAction', { height: 48 })",
+      "        instance.viewModel.bodyExternalContainer.set('other', { height: 70 })",
+      "        this.${1:TableName}Ref = instance;",
+      "    }}",
+      "    uniqueKey=\"id\"",
+      "    bodyStyle={{ minHeight: '0' }}",
+      "    scroll={{ x: this.${1}Ref && this.${1}Ref.viewModel.tableXAutoWidth, y: 300 }}",
+      "    size=\"${2|small,middle,defalut|}\"",
+      "    autoQuery={{",
+      "        params: (pageIndex,pageSize) => {",
+      "            $BLOCK_COMMENT_START 返回接口需要的对象 $BLOCK_COMMENT_END",
+      "            return { size: pageSize, current: pageIndex }",
+      "        },",
+      "        token: DevToken,",
+      "        ApiUrl: `${HttpConfig.${3:domain}}${4:Url}`,",
+      "        method: '${5|post,get|}',",
+      "        transform: (value:observablePromise.PramsResult<${6:TableContainerEntity}>) => {",
+      "            if (value) {",
+      "                if (!value.isPending) {",
+      "                    value.value.code === -1 ? message.error(<pre style={{ display: 'inline-block' }}>{value.value.message}</pre>) : '';",
+      "                    return {",
+      "                        total: 0,",
+      "                        data:[],",
+      "                    };",
+      "                }",
+      "            }",
+      "            return {",
+      "                total: 0,",
+      "                data:[],",
+      "            };",
+      "        },",
+      "        model:${6},",
+      "    }} ",
+      "    columns={${1}Columns(this)}",
+      "></HLTable>"
+    ],
+    "description": "HL Create Table Component"
+  },
+
+  "HL Create Table Component": {
+    "prefix": "HLComponentTable",
+    "body": [
+      "<HLTable",
+      "    onReady={(instance) => {",
+      "        instance.viewModel.isAdaptiveHeight = true;",
+      "        instance.viewModel.bodyExternalContainer.set('ButtonAction', { height: 48 })",
+      "        instance.viewModel.bodyExternalContainer.set('other', { height: 70 })",
+      "        this.${1:TableName}Ref = instance;",
+      "    }}",
+      "    uniqueKey=\"id\"",
+      "    bodyStyle={{ minHeight: '0' }}",
+      "    scroll={{ x: this.${1}Ref && this.${1}Ref.viewModel.tableXAutoWidth, y: 300 }}",
+      "    size=\"${2|small,middle,defalut|}\"",
+      "    autoQuery={{",
+      "        params: (pageIndex,pageSize) => {",
+      "            $BLOCK_COMMENT_START 返回接口需要的对象 $BLOCK_COMMENT_END",
+      "            return { size: pageSize, current: pageIndex }",
+      "        },",
+      "        token: DevToken,",
+      "        ApiUrl: `${HttpConfig.${3:domain}}${4:Url}`,",
+      "        method: '${5|post,get|}',",
+      "        transform: (value:observablePromise.PramsResult<${6:TableContainerEntity}>) => {",
+      "            if (value) {",
+      "                if (!value.isPending) {",
+      "                    value.value.code === -1 ? message.error(<pre style={{ display: 'inline-block' }}>{value.value.message}</pre>) : '';",
+      "                    return {",
+      "                        total: 0,",
+      "                        data:[],",
+      "                    };",
+      "                }",
+      "            }",
+      "            return {",
+      "                total: 0,",
+      "                data:[],",
+      "            };",
+      "        },",
+      "        model:${6},",
+      "    }} ",
+      "    columns={${1}Columns(this)}",
+      "></HLTable>"
+    ],
+    "description": "HL Create Table Component"
+  },
+
+  "HL Create Select Table Component": {
+    "prefix": "HLComponentSelectTable",
+    "body": [
+      "<HLTable",
+      "    onReady={(instance) => {",
+      "        instance.viewModel.isAdaptiveHeight = true;",
+      "        instance.viewModel.bodyExternalContainer.set('ButtonAction', { height: 48 })",
+      "        instance.viewModel.bodyExternalContainer.set('other', { height: 70 })",
+      "        this.${1:Table}Ref = instance;",
+      "    }}",
+      "    uniqueKey=\"id\"",
+      "    bodyStyle={{ minHeight: '0' }}",
+      "    scroll={{ x: this.${1}Ref && this.${1}Ref.viewModel.tableXAutoWidth, y: 300 }}",
+      "    size=\"${2|small,middle,defalut|}\"",
+      "    type=\"${3|checkbox,radio|}\"",
+      "    rowSelectionClickType=\"${4|check,radio|}\"",
+      "    autoQuery={{",
+      "        params: (pageIndex,pageSize) => {",
+      "            $BLOCK_COMMENT_START 返回接口需要的对象 $BLOCK_COMMENT_END",
+      "            return { size: pageSize, current: pageIndex }",
+      "        },",
+      "        token: DevToken,",
+      "        ApiUrl: `${HttpConfig.${5:domain}}${6:Url}`,",
+      "        method: '${7|post,get|}',",
+      "        transform: (value:observablePromise.PramsResult<${8:TableContainerEntity}>) => {",
+      "            if (value) {",
+      "                if (!value.isPending) {",
+      "                    value.value.code === -1 ? message.error(<pre style={{ display: 'inline-block' }}>{value.value.message}</pre>) : '';",
+      "                    return {",
+      "                        total: 0,",
+      "                        data:[],",
+      "                    };",
+      "                }",
+      "            }",
+      "            return {",
+      "                total: 0,",
+      "                data:[],",
+      "            };",
+      "        },",
+      "        model:${8},",
+      "    }} ",
+      "    selectedRowKeys={${1}Ref && ${1}Ref.selectedRows.map((item) => item.id)}",
+      "    onRowChange={(selectedRows) => {}}",
+      "    columns={${1}Columns(this)}",
+      "></HLTable>"
+    ],
+    "description": "HL Create Select Table Component"
+  },
+
+  "HL Create QueryConditions Component": {
+    "prefix": "HLComponentQueryConditions",
+    "body": [
+      "<QueryConditions<QCViewModel>",
+      "    size=\"${2|default,small|}\"",
+      "    defaultToggle={${3|true,false|}}",
+      "    query={${1}QueryConfig(this)}",
+      "    onReady={(instance)=>{}}",
+      "    onDidMount={(instance) => {}}",
+      " ></QueryConditions>"
+    ],
+    "description": "HL Create QueryConditions Component"
+  },
+
+  "HL Create BaiduMap Component": {
+    "prefix": "HLComponentBaiduMap",
+    "body": [
+      "<HLBaiduMap",
+      "    position={['', '']}",
+      "    marker={[{ position: ['', ''], title: ''}]}",
+      "    zoom={16}",
+      "    src=''",
+      "    hostType='2'",
+      "></HLBaiduMap>"
+    ],
+    "description": "HL Create BaiduMap Component"
+  },
+
+  "HL Create Print Component": {
+    "prefix": "HLComponentPrint",
+    "body": [
+      "<HLPrint",
+      "    copyStyles={true}",
+      "    bodyClass=''",
+      "    trigger={() => {",
+      "        return <Button type=\"primary\" icon=\"printer\">打印</Button>",
+      "    }}",
+      "    content={() => {",
+      "        return document.getElementById('${1:app}')",
+      "    }}",
+      "    onBeforePrint={() => {}}",
+      "    onAfterPrint={() => {}}",
+      "    debug={false}",
+      "></HLPrint>"
+    ],
+    "description": "HL Create Print Component"
+  }
+
+}
