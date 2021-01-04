@@ -1,0 +1,227 @@
+{
+  "Create HL Text FormField": {
+    "prefix": "HLCreateTextFormField",
+    "body": [
+      "textComponent:IBaseFormFields<string>= {",
+      "    value: '${1}',",
+      "}"
+    ],
+    "description": "Create HL Text FormField"
+  },
+
+  "Create LK Input FormField": {
+    "prefix": "LKCreateInputFormField",
+    "body": [
+      "/** ${1} */",
+      "lkFormItemUtils.renderInputFormItem(",
+      "  {",
+      "    label: '${1}'",
+      "  },",
+      "  new LkInputConfig({",
+      "    placeholder: '${1}'",
+      "  }),",
+      "  {",
+      "    name: '${2}'",
+      "    rules: [",
+      "      { required: true, message: '${1}必填' }",
+      "    ]",
+      " }",
+      "),"
+    ],
+    "description": "Create LK Input FormField"
+  },
+
+  "Create HL Switch FormField": {
+    "prefix": "HLCreateSwitchFormField",
+    "body": [
+      "/** ${4} */",
+      "@FormRuleProperty({",
+      "    required: ${1|true,false|},",
+      "    name: '${2:name}',",
+      "    error: '${3}',",
+      "    desc: '${4:description}',",
+      "    type: 'boolean',",
+      "})",
+      "${2}:IBaseFormFields<boolean>= {",
+      "    value: ${5|false,true|},",
+      "}"
+    ],
+    "description": "Create HL Switch FormField"
+  },
+
+  "Create HL Number Input FormField": {
+    "prefix": "HLCreateNumberInputFormField",
+    "body": [
+      "/** ${4} */",
+      "@FormRuleProperty({",
+      "    required: ${1|true,false|},",
+      "    name: '${2:name}',",
+      "    error: '${3}',",
+      "    desc: '${4:description}',",
+      "    type: 'boolean',",
+      "    regex: commonRegex.NUMBER,",
+      "})",
+      "${2}:IBaseFormFields<string>= {",
+      "    value: '${5}',",
+      "}"
+    ],
+    "description": "Create HL Number Input FormField"
+  },
+
+  "Create HL Multiple Select FormField": {
+    "prefix": "HLCreateMultipleSelectFormField",
+    "body": [
+      "/** ${4} */",
+      "@FormRuleProperty({",
+      "    required: ${1|true,false|},",
+      "    name: '${2:name}',",
+      "    error: '${3}',",
+      "    desc: '${4:description}',",
+      "    type: 'array',",
+      "})",
+      "${2}:IBaseFormFields<Array<string>> = {",
+      "    value: [],",
+      "}"
+    ],
+    "description": "Create HL Multiple Select FormField"
+  },
+
+  "Create HL Select Page FormField": {
+    "prefix": "HLCreateSelectPageFormField",
+    "body": [
+      "/** ${4} */",
+      "@FormRuleProperty({",
+      "    required: ${1|true,false|},",
+      "    name: '${2:name}',",
+      "    error: '${3}',",
+      "    desc: '${4:description}',",
+      "    type: 'object',",
+      "})",
+      "${2}:IBaseFormFields<{ key: string; label: string; title: string;keyValue:string}> = {",
+      "    value:{ key: '', label: '', title: '', keyValue: '' },",
+      "}"
+    ],
+    "description": "Create HL Select Page FormField"
+  },
+
+  "Create HL DatePicker FormField": {
+    "prefix": "HLCreateDatePickerFormField",
+    "body": [
+      "/** ${4} */",
+      "@FormRuleProperty({",
+      "    required: ${1|true,false|},",
+      "    name: '${2:name}',",
+      "    error: '${3}',",
+      "    desc: '${4:description}',",
+      "    type: 'object',",
+      "})",
+      "${2}:IBaseFormFields<moment.Moment> = {",
+      "    value: null,",
+      "    submitBeforeTransform: (value) => {",
+      "        $BLOCK_COMMENT_START 日期时间类组件的 value 改为 moment 类型，所以在提交前需要预处理。 $BLOCK_COMMENT_END",
+      "        if (value) {",
+      "            return moment(value).format('YYYY-MM-DD HH:mm:ss');",
+      "        }",
+      "        return ''",
+      "    },",
+      "}"
+    ],
+    "description": "Create HL DatePicker FormField"
+  },
+
+  "Create HL Upload FormField": {
+    "prefix": "HLCreateUploadFormField",
+    "body": [
+      "/** ${4} */",
+      "@FormRuleProperty({",
+      "    required: ${1|true,false|},",
+      "    name: '${2:name}',",
+      "    error: '${3}',",
+      "    desc: '${4:description}',",
+      "    type: 'object',",
+      "})",
+      "${2}:IBaseFormFields<UploadChangeParam> = {",
+      "    value: null,",
+      "    submitBeforeTransform: (value) => {",
+      "        $BLOCK_COMMENT_START 随便选取的数据，在真实业务中，取附件服务端存储网络地址。 $BLOCK_COMMENT_END",
+      "        if (value) {",
+      "            return ${5:value.file.uid};",
+      "        }",
+      "        return ''",
+      "    },",
+      "}"
+    ],
+    "description": "Create HL Upload FormField"
+  },
+
+  "Create HL Hidden FormField": {
+    "prefix": "HLCreateHiddenFormField",
+    "body": [
+      "/**",
+      " * 这是不在UI表单上显示但又需要提交到后台接口的表单字段",
+      " */",
+      "${1:customRender}:IBaseFormFields<${2:valueEntity}, {}, ${3:FormFieldClass}>= {",
+      "    value: '${4}',",
+      "    submitBeforeTransform: (value, formValue) => {",
+      "        $BLOCK_COMMENT_START 在这里对表单数据进行处理 $BLOCK_COMMENT_END",
+      "        let newValue = value;",
+      "        return newValue;",
+      "    },",
+      "}"
+    ],
+    "description": "you can handle the formdata which don't show in the form with the submitBeforeTransform propertiy"
+  },
+
+  "Create HL Extra FormField": {
+    "prefix": "HLCreateExtraFormField",
+    "body": [
+      "/**",
+      " * 这是在UI表单上显示但又不需要提交到后台接口的表单字段",
+      " */",
+      "@FormRuleProperty({",
+      "    required: ${1|true,false|},",
+      "    name: '${2:name}',",
+      "    error: '${3}',",
+      "    desc: '${4:description}',",
+      "    type: 'string',",
+      "})",
+      "${2}:IBaseFormFields<string> = {",
+      "    value: '${5}',",
+      "    ignore: true,",
+      "}"
+    ],
+    "description": "Create HL Extra FormField"
+  },
+
+  "Create HL Custom FormField": {
+    "prefix": "HLCreateCustomFormField",
+    "body": [
+      "/** ${4} */",
+      "@FormRuleProperty({",
+      "    required: ${1|true,false|},",
+      "    name: '${2:name}',",
+      "    error: '${3}',",
+      "    desc: '${4:description}',",
+      "    type: '${5|string,object,array|}',",
+      "    $BLOCK_COMMENT_START regex:/^[1-9]\\d*$/, $BLOCK_COMMENT_END",
+      "    validator: (value: string, error, callback) => { ",
+      "        $BLOCK_COMMENT_START 自定义验证规则 $BLOCK_COMMENT_END",
+      "        callback();",
+      "    },",
+      "})",
+      "${2}:IBaseFormFields<${5}> = {",
+      "    value: '',",
+      "    requestParamKey: '',",
+      "    beforeDataToFormFields:<${6:T}> (value, resData: ${6}) => {",
+      "        $BLOCK_COMMENT_START 接口数据转换成表单数据前作的预处理 $BLOCK_COMMENT_END",
+      "        return value",
+      "    },",
+      "    submitBeforeTransform: (value) => {",
+      "        $BLOCK_COMMENT_START 提交前作的数据预处理 $BLOCK_COMMENT_END",
+      "        return value",
+      "    },",
+      "}"
+    ],
+    "description": "Create HL Custom FormField"
+  }
+}

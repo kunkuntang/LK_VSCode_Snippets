@@ -44,7 +44,7 @@
       },
       {
         "language": "typescript",
-        "path": "./snippets/HLFormFieldSnippets.json"
+        "path": "./snippets/LKFormFieldSnippets.json"
       },
       {
         "language": "typescriptreact",

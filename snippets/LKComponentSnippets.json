@@ -1,6 +1,6 @@
 {
-  "LK Create Page Component": {
-    "prefix": "LkFormComponent",
+  "LK Create Form Component": {
+    "prefix": "LkComponentForm",
     "body": [
       "<LkFormAntdv",
       "  on={{ onReady: (form: WrappedFormUtils) => (this.${1:FormName}Ref = form) }}",
@@ -11,6 +11,19 @@
       "></LkFormAntdv>"
     ],
     "description": "Lk Create Form Component"
+  },
+  "LK Create SearchForm Component": {
+    "prefix": "LkComponentSearchForm",
+    "body": [
+      "<LkSearchForm",
+      "  formElementConfig={new ${1}FormItemFactory(this).FormItemConfig}",
+      "  config={this.${1}Config}",
+      "  formCreateConfig={this.${1}CreateConfig}",
+      "  data={this.${1}FormData}",
+      "  onSearch={this.handle${1}Search}",
+      "></LkSearchForm>"
+    ],
+    "description": "Lk Create SearchForm Component"
   },
   "HL Create Modal Component": {
     "prefix": "HLComponentModal",
@@ -40,51 +53,6 @@
       ""
     ],
     "description": "HL Create QRCoe Component"
-  },
-
-  "HL Create Table Component": {
-    "prefix": "HLComponentTable",
-    "body": [
-      "<HLTable",
-      "    onReady={(instance) => {",
-      "        instance.viewModel.isAdaptiveHeight = true;",
-      "        instance.viewModel.bodyExternalContainer.set('ButtonAction', { height: 48 })",
-      "        instance.viewModel.bodyExternalContainer.set('other', { height: 70 })",
-      "        this.${1:TableName}Ref = instance;",
-      "    }}",
-      "    uniqueKey=\"id\"",
-      "    bodyStyle={{ minHeight: '0' }}",
-      "    scroll={{ x: this.${1}Ref && this.${1}Ref.viewModel.tableXAutoWidth, y: 300 }}",
-      "    size=\"${2|small,middle,defalut|}\"",
-      "    autoQuery={{",
-      "        params: (pageIndex,pageSize) => {",
-      "            $BLOCK_COMMENT_START 返回接口需要的对象 $BLOCK_COMMENT_END",
-      "            return { size: pageSize, current: pageIndex }",
-      "        },",
-      "        token: DevToken,",
-      "        ApiUrl: `${HttpConfig.${3:domain}}${4:Url}`,",
-      "        method: '${5|post,get|}',",
-      "        transform: (value:observablePromise.PramsResult<${6:TableContainerEntity}>) => {",
-      "            if (value) {",
-      "                if (!value.isPending) {",
-      "                    value.value.code === -1 ? message.error(<pre style={{ display: 'inline-block' }}>{value.value.message}</pre>) : '';",
-      "                    return {",
-      "                        total: 0,",
-      "                        data:[],",
-      "                    };",
-      "                }",
-      "            }",
-      "            return {",
-      "                total: 0,",
-      "                data:[],",
-      "            };",
-      "        },",
-      "        model:${6},",
-      "    }} ",
-      "    columns={${1}Columns(this)}",
-      "></HLTable>"
-    ],
-    "description": "HL Create Table Component"
   },
 
   "HL Create Table Component": {
