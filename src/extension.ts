@@ -19,6 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
         const clipboardText = await vscode.env.clipboard.readText();
 
         try {
+          console.log('clipboardText', clipboardText)
           safeJsonData = JSON.parse(clipboardText);
   
           const modelCreator = new ModelCreator(
@@ -34,6 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
             : editBuilder.insert(selection.active, resultStr);
           });
         } catch (error) {
+          console.log('error', error)
           vscode.window.showErrorMessage(
             "非法的JSON字符串，请重新复制接口响应数据"
           );

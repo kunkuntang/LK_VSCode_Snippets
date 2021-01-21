@@ -149,7 +149,7 @@ export class ModelCreator {
       );
     } else {
       tempConArr.push(
-        `            this.data = super.transformRow(props.data, ${this.className}M);`
+        `            this.data = super.transformObject(props.data, ${this.className}M);`
       );
     }
     tempConArr.push(`        } else {`);
@@ -172,10 +172,11 @@ export class ModelCreator {
    */
   private generateClass(name: string, data: { [key: string]: any }) {
     let _genClass = (data: {[key: string]: any}) => {
+      console.log('genclass', data)
       Object.keys(data).forEach(key => {
         if (typeof data[key] === "number") {
           tempClassArr.push(`    @DataMapper('${key}')`);
-          tempClassArr.push(`    ${key}:number | undefined = void 0;`);
+          tempClassArr.push(`    ${key}!:number`);
           tempClassArr.push('');
         }
         if (typeof data[key] === "string") {
@@ -197,15 +198,21 @@ export class ModelCreator {
           if (data[key] === null) {
             tempClassArr.push(`    @DataMapper('${key}')`);
             tempClassArr.push(`    ${key} = null;`);
-          tempClassArr.push('');
+            tempClassArr.push('');
           } else if (Array.isArray(data[key])) {
             tempClassArr.push(`    @DataMapper('${key}')`);
-            tempClassArr.push(`    ${key}:${upperFirstCase(key)}M[] = [];`);
-          tempClassArr.push('');
-            tempClassArr.unshift(this.generateClass(upperFirstCase(key), data[key][0]))
+            // 如果不是一个空数组
+            if (data[key][0] !== undefined) {
+              tempClassArr.push(`    ${key}:${upperFirstCase(key)}M[] = [];`);
+              tempClassArr.push('');
+              tempClassArr.unshift(this.generateClass(upperFirstCase(key), data[key][0]))
+            } else {
+              tempClassArr.push(`    ${key} = [];`);
+              tempClassArr.push('');
+            }
           } else {
             tempClassArr.push(
-              `    @DataMapper({ clazz: ${key}M, name: '${key}' })`
+              `    @DataMapper({ clazz: ${upperFirstCase(key)}M, name: '${key}' })`
             );
             tempClassArr.push(`    ${key} = new ${upperFirstCase(key)}M;`);
           tempClassArr.push('');

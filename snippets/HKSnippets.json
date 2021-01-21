@@ -4,7 +4,7 @@
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
       "  return get('${2:url}', params).then((res) => {",
-      "      return new ${3:ContainerEntity}(res);",
+      "      return new ${3:ContainerEntity}(res.data);",
       "  });",
       "}"
     ],
@@ -15,11 +15,44 @@
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
       "  return post('${3:url}', params).then((res) => {",
-      "      return new ${4:ContainerEntity}(res);",
+      "      return new ${4:ContainerEntity}(res.data);",
       "  });",
       "}"
     ],
     "description": "Create Lk Post Service"
+  },
+  "Create Lk Delete Service": {
+    "prefix": "LkCreateDeleteService",
+    "body": [
+      "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
+      "  return _delete('${3:url}', params).then((res) => {",
+      "      return new ${4:ContainerEntity}(res.data);",
+      "  });",
+      "}"
+    ],
+    "description": "Create Lk Delete Service"
+  },
+  "Create Lk Put Service": {
+    "prefix": "LkCreatePutService",
+    "body": [
+      "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
+      "  return put('${3:url}', params).then((res) => {",
+      "      return new ${4:ContainerEntity}(res.data);",
+      "  });",
+      "}"
+    ],
+    "description": "Create Lk Put Service"
+  },
+  "Create Lk Update Service": {
+    "prefix": "LkCreateUpdateService",
+    "body": [
+      "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
+      "  return update('${3:url}', params).then((res) => {",
+      "      return new ${4:ContainerEntity}(res.data);",
+      "  });",
+      "}"
+    ],
+    "description": "Create Lk Update Service"
   },
   "HLCreate FormSubmit Snippets": {
     "prefix": "HLCreateFormSubmitSnippets",
