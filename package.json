@@ -53,6 +53,14 @@
       {
         "language": "typescript",
         "path": "./snippets/HKSnippets.json"
+      },
+      {
+        "language": "typescriptreact",
+        "path": "./snippets/LKAntDSnippets.json"
+      },
+      {
+        "language": "typescriptreact",
+        "path": "./snippets/LKFormItemConfigSnippets.json"
       }
     ]
   },

@@ -1,0 +1,70 @@
+{
+    "Create LK AntD Modal" : {
+        "prefix" : "LKAntDModal",
+        "body" : [
+            "{/** ${2:name} */}",
+            "<Modal",
+            "   visible={this.${1:isShow}} //弹窗是否显示",
+            "   title=\"${2}\" //弹窗标题",
+            "   cancelText=\"${3:取消}\" //取消文字",
+            "   okText=\"${4:确定}\" //确定文字",
+            "   onCancel={this.${5:showClick}} //取消事件",
+            "   onOk={this.${6:handleOk}} //确定事件",
+            ">",
+            "</Modal>",
+            "{/** 官方文档位置 https://www.antdv.com/components/modal-cn/ */}"
+        ], 
+        "description" : "生成弹窗模板"
+    },
+    "Create LK AntD Table" : {
+        "prefix" : "LKAntDTable",
+        "body" : [
+            "{/** ${1:name} */}",
+            "<Table ",
+            "   rowSelection={this.${2:rowSelection}} //可选按钮",
+            "   columns={this.${3:columns}} //表格标头数据",
+            "   dataSource={this.${4:dataSource}} //表格内容数据",
+            ">",
+            "{/** ${5:操作插槽} */}",
+            "   <span slot=\"operation\" slot-scope=\"text\">",
+            "       <a>编辑</a>",
+            "       <Divider type=\"vertical\" />",
+            "       <a>删除</a>",
+            "   </span>",
+            "</Table>",
+            "{/** 官方文档位置 https://www.antdv.com/components/table-cn/ */}"
+        ],
+        "description" : "生成表格模板"
+    },
+    "Create LK AntD Tabs" : {
+        "prefix" : "LKAntDTabs",
+        "body" : [
+            "{/** ${1:name} */}",
+            "<Tabs",
+            "   defaultActiveKey=\"${2:key}\" //当前选中索引",
+            "   change={this.${3:callback}} //选中事件",
+            ">",
+            "   <TabPane key=\"${2}\" tab=\"${3:name}\">",
+            "       ${4:title}",
+            "   <TabPane>",
+            "   <TabPane key=\"${5}\" tab=\"${6:name}\">",
+                "       ${7:title}",
+                "<TabPane>",
+            "</Tabs>",
+            "{/** 官方文档位置 https://www.antdv.com/components/tabs-cn/ */}"
+        ],
+        "description" : "生成标签页模板"
+    },
+    "Create LK AntD Grid"  : {
+        "prefix" : "LKAntDGrid",
+        "body" : [
+            "{/** ${1:name} */}",
+            "<Row type=\"flex\">",
+            "   <Col flex=\"${2}\"></Col>",
+            "   <Col flex=\"${3}\"></Col>",
+            "</Row>",
+            "{/** 官方文档位置 https://www.antdv.com/components/grid-cn/ */}"
+        ],
+        "description" : "生成删格模板"
+    }
+}
