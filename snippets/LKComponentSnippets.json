@@ -5,8 +5,8 @@
       "<LkFormAntdv",
       "  on={{ onReady: (form: WrappedFormUtils) => (this.${1:FormName}Ref = form) }}",
       "  formElementConfig={new ${1}FormItemFactory(this).FormItemConfig}",
-      "  config={this.${1}Config}",
-      "  formCreateConfig={this.${1}CreateConfig}",
+      "  config={new LkFormConfig({})}",
+      "  formCreateConfig={new LkFormCreateConfig({})}",
       "  data={this.${1}FormData}",
       "></LkFormAntdv>"
     ],
@@ -15,13 +15,13 @@
   "LK Create SearchForm Component": {
     "prefix": "LkComponentSearchForm",
     "body": [
-      "<LkSearchForm",
+      "<LkSearchFormAntdv",
       "  formElementConfig={new ${1}FormItemFactory(this).FormItemConfig}",
-      "  config={this.${1}Config}",
-      "  formCreateConfig={this.${1}CreateConfig}",
+      "  config={new LkFormConfig({})}",
+      "  formCreateConfig={new LkFormCreateConfig({})}",
       "  data={this.${1}FormData}",
       "  onSearch={this.handle${1}Search}",
-      "></LkSearchForm>"
+      "></LkSearchFormAntdv>"
     ],
     "description": "Lk Create SearchForm Component"
   },

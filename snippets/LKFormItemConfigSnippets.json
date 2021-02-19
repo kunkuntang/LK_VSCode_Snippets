@@ -36,6 +36,7 @@
       "* 下拉框 Select",
       "* 输入框 Input",
       "* 数字输入框 InputNumber",
+      "* 树形下拉选择 TreeSelect",
       "*/}",
       "}"
     ],

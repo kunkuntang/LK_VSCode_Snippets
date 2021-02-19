@@ -43,7 +43,8 @@
       "      }",
       "    ),",
       "  ]",
-      "}"
+      "}",
+      "export default ${1:FormName}FormItemConfigFactory;"
     ],
     "description": "LK Create Form Config Container"
   },
