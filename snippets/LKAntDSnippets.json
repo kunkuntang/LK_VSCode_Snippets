@@ -2,18 +2,16 @@
     "Create LK Components Modal" : {
         "prefix" : "LKComponentsModal",
         "body" : [
-            "{/** ${2:name} */}",
-            "<Modal",
-            "   visible={this.${1:isShow}} //弹窗是否显示",
-            "   title=\"${2}\" //弹窗标题",
-            "   cancelText=\"${3:取消}\" //取消文字",
-            "   okText=\"${4:确定}\" //确定文字",
-            "   onCancel={this.${5:showClick}} //取消事件",
-            "   onOk={this.${6:handleOk}} //确定事件",
+            "<LkModalAntdv",
+            "   onReady={(modalRef: LkModalInstance) => this.${1}ModalRef = modalRef}",
+            "   config={new LkModalConfig({",
+            "        title: '${2}',",
+            "        okText: '确定',",
+            "        cancelText: '取消',",
+            "})}",
             ">",
-            "</Modal>",
-            "{/** 官方文档位置 https://www.Componentsv.com/components/modal-cn/ */}"
-        ], 
+            "</LkModalAntdv>"
+        ],
         "description" : "生成弹窗模板"
     },
     "Create LK Components Tabs" : {
@@ -46,5 +44,18 @@
             "{/** 官方文档位置 https://www.Componentsv.com/components/grid-cn/ */}"
         ],
         "description" : "生成删格模板"
+    },
+    "Create LK Components Table" : {
+        "prefix" : "LKComponentsTable",
+        "body" : [
+            "<LkTableAntdv",
+            "   columns={new ${1}ColumnsConfig().config(this)}",
+            "   dataSource={this.${1}Data}",
+            "   config={new LkTableConfig({})}",
+            "   onChange={this.${2}}",
+            ">",
+            "</LkTableAntdv>"
+        ],
+        "description" : "生成表格模板"
     }
 }

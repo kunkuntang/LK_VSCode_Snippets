@@ -60,7 +60,7 @@
       },
       {
         "language": "typescriptreact",
-        "path": "./snippets/LKFormItemConfigSnippets.json"
+        "path": "./snippets/LKConfigSnippets.json"
       }
     ]
   },

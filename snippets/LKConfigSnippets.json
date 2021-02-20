@@ -37,6 +37,7 @@
       "* 输入框 Input",
       "* 数字输入框 InputNumber",
       "* 树形下拉选择 TreeSelect",
+      "* 自定义 Custom",
       "*/}",
       "}"
     ],
@@ -68,6 +69,7 @@
       "* 下拉框 Select",
       "* 输入框 Input",
       "* 数字输入框 InputNumber",
+      "* 自定义 Custom",
       "*/}"
     ],
     "description": "渲染表单项配置"
@@ -106,9 +108,57 @@
       "* 下拉框 Select",
       "* 输入框 Input",
       "* 数字输入框 InputNumber",
+      "* 自定义 Custom",
       "*/}",
       "}"
     ],
     "description": "创建继承vue表单配置容器"
+  },
+  "HL Create Custom From Config": {
+    "prefix": "LKCreateCustomFormConfig",
+    "body": [
+      "lkFormItemUtils.renderCustomFormItem(",
+      "  {",
+      "     label: \"${1}\",",
+      "   },",
+      "  {",
+      "     renderJSX: () => {",
+      "       return (",
+      "           <div></div>",
+      "       );",
+      "     },",
+      "   }",
+      ")"
+    ],
+    "description": "渲染自定义表单项配置"
+  },
+  "HL Create Table Columns Config": {
+    "prefix": "LKCreateTableColumnsConfig",
+    "body": [
+      "import { installVueComponent } from '@/utils';",
+      "import { Component, Vue } from \"vue-property-decorator\";",
+      "@Component({",
+      "    components: {",
+      "        ...installVueComponent([])",
+      ")}",
+      "export class ${1}ColumnsConfig extends Vue {",
+      "    config() {",
+      "        return [",
+      "           {",
+      "               title: '${2}',",
+      "               dataIndex: '${3}',",
+      "           },",
+      "           {",
+      "               title: '操作',",
+      "               customRender: (text: string, row: any, index: number) => {",
+      "                   return <div></div>",
+      "                }",
+      "            }",
+      "         ]",
+      "     }",
+      "}"
+    ],
+    "description": "渲染表格标头配置"
   }
+
 }
