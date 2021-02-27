@@ -3,7 +3,9 @@
     "prefix": "LkCreateGetService",
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
-      "  return get('${2:url}', params).then((res) => {",
+      "  return get('${2:url}', params, {",
+      "     baseURL: process.env.${5}",
+      "   }).then((res) => {",
       "      return new ${3:ContainerEntity}(res.data);",
       "  });",
       "}"
@@ -14,7 +16,9 @@
     "prefix": "LkCreatePostService",
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
-      "  return post('${3:url}', params).then((res) => {",
+      "  return post('${3:url}', params, {",
+      "     baseURL: process.env.${5}",
+      "   }).then((res) => {",
       "      return new ${4:ContainerEntity}(res.data);",
       "  });",
       "}"
@@ -25,7 +29,9 @@
     "prefix": "LkCreateDeleteService",
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
-      "  return _delete('${3:url}', params).then((res) => {",
+      "  return _delete('${3:url}', params, {",
+      "     baseURL: process.env.${5}",
+       " }).then((res) => {",
       "      return new ${4:ContainerEntity}(res.data);",
       "  });",
       "}"
@@ -36,7 +42,9 @@
     "prefix": "LkCreatePutService",
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
-      "  return put('${3:url}', params).then((res) => {",
+      "  return put('${3:url}', params, {",
+      "     baseURL: process.env.${5}",
+      "  }).then((res) => {",
       "      return new ${4:ContainerEntity}(res.data);",
       "  });",
       "}"
@@ -76,5 +84,16 @@
       "}"
     ],
     "description": "LkCreate Enum Snippets"
+  },
+  "HLCreate MutationAction Snippets": {
+    "prefix": "LKCreateMutationActionSnippets",
+    "body":[
+      "/** ${1} */",
+      "@MutationAction({ mutate: ['${2}'] })",
+      "async ${3}ServiceAction(Query: string) {",
+      " const ${4} = await ${3}Service(Query);",
+      "  return { ${2}: ${4}.data }",
+      "}"
+    ]
   }
 }
