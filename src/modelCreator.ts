@@ -103,11 +103,11 @@ export class ModelCreator {
     tempConArr.push('');
     if (Array.isArray(data["data"])) {
       tempConArr.push(
-        `    constructor(props: I${this.className}ContainerModel<${this.className}M[]>){`
+        `    constructor(props: IBaseContainerModel<${this.className}M[]>){`
       );
     } else {
       tempConArr.push(
-        `    constructor(props: I${this.className}ContainerModel<${this.className}M>){`
+        `    constructor(props: IBaseContainerModel<${this.className}M>){`
       );
     }
     tempConArr.push(`        super(props);`);
@@ -123,7 +123,7 @@ export class ModelCreator {
         tempConArr.push(`        this.success = props.${key} || true;`);
       }
       if (key === "status" || key === "code") {
-        tempConArr.push(`        this.code = props.${key} || '';`);
+        tempConArr.push(`        this.code = props.${key};`);
         tempConArr.push('');
       }
 
