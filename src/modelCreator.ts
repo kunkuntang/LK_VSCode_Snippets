@@ -176,7 +176,7 @@ export class ModelCreator {
       Object.keys(data).forEach(key => {
         if (typeof data[key] === "number") {
           tempClassArr.push(`    @DataMapper('${key}')`);
-          tempClassArr.push(`    ${key}: number = Number.MAX_VALUE`);
+          tempClassArr.push(`    ${key}: number = Number.MAX_SAFE_INTEGER`);
           tempClassArr.push('');
         }
         if (typeof data[key] === "string") {
