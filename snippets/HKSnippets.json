@@ -4,7 +4,7 @@
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
       "  return get('${2:url}', params, {",
-      "     baseURL: process.env.${5}",
+      "     baseURL: SystemStore.tenantUrl,",
       "   }).then((res) => {",
       "      return new ${3:ContainerEntity}(res.data);",
       "  });",
@@ -17,7 +17,7 @@
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
       "  return post('${3:url}', params, {",
-      "     baseURL: process.env.${5}",
+      "     baseURL: SystemStore.tenantUrl,",
       "   }).then((res) => {",
       "      return new ${4:ContainerEntity}(res.data);",
       "  });",
@@ -30,7 +30,7 @@
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
       "  return _delete('${3:url}', params, {",
-      "     baseURL: process.env.${5}",
+      "     baseURL: SystemStore.tenantUrl,",
        " }).then((res) => {",
       "      return new ${4:ContainerEntity}(res.data);",
       "  });",
@@ -43,7 +43,7 @@
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
       "  return put('${3:url}', params, {",
-      "     baseURL: process.env.${5}",
+      "     baseURL: SystemStore.tenantUrl,",
       "  }).then((res) => {",
       "      return new ${4:ContainerEntity}(res.data);",
       "  });",
@@ -65,7 +65,7 @@
   "HLCreate FormSubmit Snippets": {
     "prefix": "HLCreateFormSubmitSnippets",
     "body": [
-      "this.${1:formRef}.viewModel.form.validateFields((err, values: ${2:接口数据模型对象) => {",
+      "this.${1:formRef}.validateFields((err, values: ${2:接口数据模型对象) => {",
       "  if (!err) {",
       "    const formData = this.${1:formRef}.viewModel.InputDataModel as ${3:表单字段数据模型对象};",
       "    const addParams = BaseFormFields.formFieldsToData<${3:表单字段数据模型对象}, ${2:接口数据模型对象>(${3:表单字段数据模型对象}, formData)",
@@ -83,7 +83,7 @@
       "  static ${4:EnumProperty} = new BaseEnum(${5:code}, ${6:value});",
       "}"
     ],
-    "description": "LkCreate Enum Snippets"
+    "description": "LkCreate Enum Snippets（创建一个枚举类）"
   },
   "HLCreate MutationAction Snippets": {
     "prefix": "LKCreateMutationActionSnippets",

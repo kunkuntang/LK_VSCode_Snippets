@@ -3,7 +3,7 @@
     "prefix": "LkComponentForm",
     "body": [
       "<LkFormAntdv",
-      "  on={{ onReady: (form: WrappedFormUtils) => (this.${1:FormName}Ref = form) }}",
+      "  onReady={(formRef: WrappedFormUtils) => this.${1:FormName}Ref = formRef }",
       "  formElementConfig={new ${1}FormItemFactory(this).FormItemConfig}",
       "  config={new LkFormConfig({})}",
       "  formCreateConfig={new LkFormCreateConfig({})}",
@@ -25,7 +25,7 @@
     ],
     "description": "Lk Create SearchForm Component"
   },
-  "HL Create Modal Component": {
+  "LK Create Modal Component": {
     "prefix": "HLComponentModal",
     "body": [
       "<HLModal onReady={(instance) => {",
@@ -37,7 +37,7 @@
       "    ${0}",
       "</HLModal>"
     ],
-    "description": "HL Create Modal Component"
+    "description": "LK Create Modal Component"
   },
 
   "HL Create QRCoe Component": {

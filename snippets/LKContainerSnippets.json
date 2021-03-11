@@ -131,24 +131,24 @@
     "description": "HL Create QueryConditions Config"
   },
 
-  "Create HL Store Container": {
-    "prefix": "HLContainerStore",
+  "Create LK Store Container": {
+    "prefix": "LKContainerStore",
     "body": [
-      "import StoreBase, { IStoreBaseMeta } from '../../common/stores/StoreBase';",
-      "import { observable, action, computed } from 'mobx';",
-      "import { observablePromise } from 'brain-store-utils';",
-      "",
-      "export default class ${1:StoreName} extends StoreBase {",
-      "    static meta: IStoreBaseMeta = {",
-      "        ...StoreBase.meta,",
-      "        className: '${1}',",
-      "        contextTypes: {},",
-      "    };",
-      "    ",
-      "    ${0}",
-      "}"
+      "import { getModule, Module, VuexModule } from \"vuex-module-decorators\";",
+      "import store from \"../index\";",
+      "",  
+      "  @Module({",
+      "    name: '${0}',",
+      "    dynamic: true,",
+      "    namespaced: true,",
+      "    store,",
+      "  })",
+      "  class ${1}StoreModule extends VuexModule {",
+      "  }",
+      "  ",
+      "  export const ${1}TagStore = getModule(${1}StoreModule);"
     ],
-    "description": "Create HL Store Container"
+    "description": "Create LK Store Container"
   },
 
   "HL Create Table Columns Item": {

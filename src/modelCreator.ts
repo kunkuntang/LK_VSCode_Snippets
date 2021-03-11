@@ -41,7 +41,7 @@ export class ModelCreator {
     if (this.data !== null) {
       // 构建接口 model constructor
       this.modelStr.push(this.generateConstructor(this.data));
-      this.modelStr.push(this.generateInterface(this.data));
+      // this.modelStr.push(this.generateInterface(this.data));
       this.modelStr.push(this.generateClass(this.className, this.data["data"] || {}));
       // this.modelStr.push(this.generateClass(this.className, this.data || {}));
       return this.modelStr.reverse().join(this.enterSign);
