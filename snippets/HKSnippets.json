@@ -51,6 +51,19 @@
     ],
     "description": "Create Lk Put Service"
   },
+  "Create Lk Patch Service": {
+    "prefix": "LkCreatePatchService",
+    "body": [
+      "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
+      "  return patch('${3:url}', params, {",
+      "     baseURL: SystemStore.tenantUrl",
+      "  }).then((res) => {",
+      "      return new ${4:ContainerEntity}(res.data);",
+      "  });",
+      "}"
+    ],
+    "description": "Create Lk Patch Service"
+  },
   "Create Lk Update Service": {
     "prefix": "LkCreateUpdateService",
     "body": [
@@ -87,7 +100,7 @@
   },
   "HLCreate MutationAction Snippets": {
     "prefix": "LKCreateMutationActionSnippets",
-    "body":[
+    "body": [
       "/** ${1} */",
       "@MutationAction({ mutate: ['${2}'] })",
       "async ${3}ServiceAction(Query: string) {",
