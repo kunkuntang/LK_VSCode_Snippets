@@ -49,55 +49,26 @@
     "description": "LK Create Form Config Container"
   },
 
-  "Create HL Form Field Config Container": {
-    "prefix": "HLContainerFormField",
+  "LK Create Table Columns Config Container": {
+    "prefix": "LKContainerTableColumns",
     "body": [
-      "import { FormRuleProperty, createFormRule } from 'hoolinks/form-rule';",
-      "import { mapFields } from '../../../common/utils/fields';",
-      "import { BaseFormFields, IBaseFormFields } from 'hoolinks-legion-design/lib/models/BaseFormFields';",
+      "import { Column } from 'ant-design-vue/types/table/column';",
+      "import { Component, Vue } from \"vue-property-decorator\";",
       "",
-      "$BLOCK_COMMENT_START 表单字段类 $BLOCK_COMMENT_END",
-      "export class ${1:FormFieldName}FormFields extends BaseFormFields {",
-      "    ${0}",
-      "    ",
-      "    constructor(form?: ${1}FormFields) {",
-      "        super()",
-      "        mapFields.call(this, form);",
-      "    }",
-      "",
-      "    static getFormFields(form: ${1}FormFields) {",
-      "        let obj = new ${1}FormFields();",
-      "        Object.keys(obj).forEach(item => {",
-      "            obj[item] = form[item];",
-      "        });",
-      "        return obj;",
-      "    }",
-      "}",
-      "",
-      "$BLOCK_COMMENT_START 表单规则类 $BLOCK_COMMENT_END",
-      "export class ${1}FormRule extends ${1}FormFields {",
-      "    constructor(form?: ${1}FormFields) {",
-      "        super(form);",
-      "        createFormRule(${1}FormFields, this);",
-      "    }",
-      "}"
-    ],
-    "description": "Create HL Form Field Config Container"
-  },
-
-  "HL Create Table Columns Config Container": {
-    "prefix": "HLContainerTableColumns",
-    "body": [
-      "import React from 'react';",
-      "import { ITableColumnConfigProps } from 'hoolinks-legion-design/lib/typings/antd';",
-      "",
-      "export const ${1:TableName} = (_this: ${2:PageClass}): ITableColumnConfigProps[] => {",
+      "@Component",
+      "export class ${1:表格名称}TableColumnsConfig extends Vue {",
+      "  getConfig(that?: ${4:引用的Vue类实例}): Partial<Column>[] {",
       "    return [",
-      "        ${0}",
+      "      {",
+      "        title: \"${2}\",",
+      "        dataIndex: \"${3}\",",
+      "        key: \"${3}\",",
+      "      },",
       "    ]",
+      "  }",
       "}"
     ],
-    "description": "HL Create Table Columns Config Container"
+    "description": "创建表格列模板代码"
   },
 
   "Create HL QueryConditions Config": {
@@ -149,61 +120,5 @@
       "  export const ${1}TagStore = getModule(${1}StoreModule);"
     ],
     "description": "Create LK Store Container"
-  },
-
-  "HL Create Table Columns Item": {
-    "prefix": "HLCreateTableColumnsItem",
-    "body": [
-      "{",
-      "    title: '${1:title}',",
-      "    width: 120,",
-      "    tooltip: ${2|true,false|},",
-      "    dataIndex: '${3:dataIndex}',",
-      "},"
-    ],
-    "description": "HL Create Table Columns Item"
-  },
-
-  "Create HL FormField Rule": {
-    "prefix": "HLCreateFormFieldRule",
-    "body": [
-      "$BLOCK_COMMENT_START 表单规则类 $BLOCK_COMMENT_END",
-      "export class ${1}FormRules extends ${1}FormFields {",
-      "    constructor(form?: ${1}FormFields) {",
-      "        super(form);",
-      "        createFormRule(${1}FormFields, this);",
-      "    }",
-      "}"
-    ],
-    "description": "Create HL FormField Rule"
-  },
-
-  "Create HL FormField Extend Rule": {
-    "prefix": "HLCreateFormFieldExtendRule",
-    "body": [
-      "$BLOCK_COMMENT_START 表单拓展规则类 $BLOCK_COMMENT_END",
-      "class ${1:FormFieldName}FormExtendsRules extends ${1}FormFields {",
-      "    /** 表单拓展规则 */",
-      "    @FormRuleProperty({",
-      "        required: true,",
-      "        name: 'companyName1',",
-      "        error: '',",
-      "        desc: '表单拓展规则',",
-      "        type: 'string',",
-      "    })",
-      "    companyName1: IBaseFormFields<string> = {",
-      "        value: '',",
-      "    };",
-      "}",
-      "",
-      "$BLOCK_COMMENT_START 表单规则类 $BLOCK_COMMENT_END",
-      "export class ${1}FormRule extends ${1}FormFields {",
-      "    constructor(form?: ${1}FormFields) {",
-      "        super(form);",
-      "        createFormRule(${1}FormFields, this, ${1}FormExtendsRules);",
-      "    }",
-      "}"
-    ],
-    "description": "Create HL FormField Extend Rule"
   }
 }

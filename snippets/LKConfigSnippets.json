@@ -132,34 +132,29 @@
     ],
     "description": "渲染自定义表单项配置"
   },
-  "HL Create Table Columns Config": {
+  "LK Create Table Columns Config": {
     "prefix": "LKCreateTableColumnsConfig",
     "body": [
-      "import { installVueComponent } from '@/utils';",
-      "import { Component, Vue } from \"vue-property-decorator\";",
-      "@Component({",
-      "    components: {",
-      "        ...installVueComponent([])",
-      "    }",
-      "})",
-      "export class ${1}ColumnsConfig extends Vue {",
-      "    config() {",
-      "        return [",
-      "           {",
-      "               title: '${2}',",
-      "               dataIndex: '${3}',",
-      "           },",
-      "           {",
-      "               title: '操作',",
-      "               customRender: (text: string, row: any, index: number) => {",
-      "                   return <div></div>",
-      "                }",
-      "            }",
-      "         ]",
-      "     }",
-      "}"
+      "{",
+      "  title: '${1}',",
+      "  dataIndex: '${2}',",
+      "  key: '${2}',",
+      "},"
     ],
     "description": "渲染表格标头配置"
+  },
+  "LK Create Table Custom Columns Config": {
+    "prefix": "LKCreateTableCustomColumnsConfig",
+    "body": [
+      "{",
+      "  title: '${1}',",
+      "  dataIndex: '${2}',",
+      "  key: '${2}',",
+      "  customRender: (text: string, row: ${3: any}, index: number) => {",
+      "    return <span>{text}</span>",
+      "  },",
+      "},"
+    ],
+    "description": "渲染自定义表格标头配置"
   }
-
 }

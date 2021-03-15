@@ -56,10 +56,6 @@
       },
       {
         "language": "typescriptreact",
-        "path": "./snippets/LKAntDSnippets.json"
-      },
-      {
-        "language": "typescriptreact",
         "path": "./snippets/LKConfigSnippets.json"
       }
     ]

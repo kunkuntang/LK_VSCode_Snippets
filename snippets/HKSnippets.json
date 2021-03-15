@@ -75,30 +75,7 @@
     ],
     "description": "Create Lk Update Service"
   },
-  "HLCreate FormSubmit Snippets": {
-    "prefix": "HLCreateFormSubmitSnippets",
-    "body": [
-      "this.${1:formRef}.validateFields((err, values: ${2:接口数据模型对象) => {",
-      "  if (!err) {",
-      "    const formData = this.${1:formRef}.viewModel.InputDataModel as ${3:表单字段数据模型对象};",
-      "    const addParams = BaseFormFields.formFieldsToData<${3:表单字段数据模型对象}, ${2:接口数据模型对象>(${3:表单字段数据模型对象}, formData)",
-      "    // 调用接口",
-      "    ${0}",
-      "  }",
-      "})"
-    ],
-    "description": "HLCreate FormSubmit Snippets"
-  },
-  "HLCreate Enum Snippets": {
-    "prefix": "LkCreateEnumSnippets",
-    "body": [
-      "export class ${1:EnumName} extends BaseEnum<${2:codeType}, ${3:valueType}> {",
-      "  static ${4:EnumProperty} = new BaseEnum(${5:code}, ${6:value});",
-      "}"
-    ],
-    "description": "LkCreate Enum Snippets（创建一个枚举类）"
-  },
-  "HLCreate MutationAction Snippets": {
+  "LKCreate MutationAction Snippets": {
     "prefix": "LKCreateMutationActionSnippets",
     "body": [
       "/** ${1} */",
@@ -108,5 +85,33 @@
       "  return { ${2}: ${4}.data }",
       "}"
     ]
+  },
+  "LK Create Store List Data": {
+    "prefix": "LKCreateStoreListData",
+    "body": [
+      "${1:列表变量名}SD = BaseServiceModel<${2:数据模型名称}>();;",
+      "",
+      "get ${1}() {",
+      "  if (",
+      "    this.${1}SD.isResolved &&",
+      "    this.${1}SD.value?.code === 0 &&",
+      "    this.${1}SD.value.data !== undefined",
+      "  ) {",
+      "    return this.${1}SD.value.data;",
+      "  } else {",
+      "    return [];",
+      "  }",
+      "}",
+      "",
+      "@MutationAction({ mutate: [\"${1}SD\"] })",
+      "async get${3:开头大写的列表变量名}Action(",
+      "  params: Parameters<typeof Get${3}Service>[0]",
+      ") {",
+      "  return {",
+      "    ${1}SD: BaseServiceModel(Get${3}Service(params)),",
+      "  };",
+      "}"
+    ],
+    "description": "在store中创建一个列表数据对象"
   }
 }
