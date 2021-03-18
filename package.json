@@ -2,7 +2,7 @@
   "name": "lk-vscode-snippets",
   "displayName": "LK_VSCode_Snippets",
   "description": "This is extension for lk-components-antdv",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "publisher": "kuntang",
   "engines": {
     "vscode": "^1.51.0"
