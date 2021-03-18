@@ -1,153 +1,121 @@
-# HLSnippets
+# LKSnippets
 
 <p align="center">
-  <img width="300" src="https://raw.githubusercontent.com/kunkuntang/HL_VSCode_Snippets/develop/images/HLS-icon.png" />
+  <img width="300" src="https://raw.githubusercontent.com/kunkuntang/LK_VSCode_Snippets/master/images/LKS-icon.png" />
 </p>
 
 Using this extensions, you can generate all kinds of template code. Hope you like it!
 
-[English Document](https://github.com/kunkuntang/HL_VSCode_Snippets/blob/master/README.md) | [中文文档](https://github.com/kunkuntang/HL_VSCode_Snippets/blob/master/README_CN.md)
-
 ## Features
 
-- support create data model from service interface;
-- fix HLComponentTable Snippets placeholder;
-- add QueryCondition snippet;
-- move the other snippet from HLContainerSnippets.json to HLSnippets.json
-- add checkbox group formItem and radio group formItem
-- add submitAutoMessage snippet
+- 支持自动生成 Modal 层
+- 支持表格、表格项脚本生成
+- 支持表单、表单项脚本生成
+- 支持页面文件脚本生成
+- 支持 store 文件脚本生成
 
-## Installation
-Install through VS Code extensions. Search for HLSnippets
+## 安装
+通过 vscode 的插件市场安装： 搜索 LK_VSCode_Snippets
 
-[Visual Studio Code Market Place: HLSnippets](https://marketplace.visualstudio.com/items?itemName=kuntang.hlsnippets)
+[Visual Studio Code Market Place: LKSnippets](https://marketplace.visualstudio.com/items?itemName=kuntang.LKsnippets)
 
-## Usage
+## 使用方法
 
-These extends includes three types of snippets:
+这个插件提供三种类型的脚本：
 
-- Container Snippets, create page template code in blank file.
-- Component Snippets, create component template code in a page.
-- Creator(Create) Snippets, create some special template code in all kinds of file, like store, service, etc.
+- 文件脚本，生成当你创建一个文件时要写的代码
+- 组件脚本，生成你想要写的组件的代码
+- 碎片脚本，生成一些零碎的代码片段，如请求接口代码等
 
-According these snippets categories, `HLSnippets` defined the snippet instruction with `prefix` + `scope` + `type`.
+根据脚本的分类，`LKSnippets` 把脚本指令拆开了三部分：`prefix` + `scope` + `type`。用下面一个简单示例来讲解：
 
-### Simple Example
+当开发者想要新建一个页面时会进行一下步骤：
 
-When I want to write a new page, I will create jsx file in the workspace and open the file. Then write `HLContainerPage` and tab the tips, so the page template code will show on the file.
+1. 新建一个 jsx 后缀的页面文件
+2. 然后输入 `LKContainerPage` 指令并按回车生成代码
+3. 开发者继续进行业务开发
 
 <p align="center">
-  <img width="1440" src="https://raw.githubusercontent.com/kunkuntang/HL_VSCode_Snippets/develop/images/HLSinppets-intro.gif" />
+  <img width="1440" src="https://raw.githubusercontent.com/kunkuntang/LK_VSCode_Snippets/develop/images/LKSinppets-intro.gif" />
 </p>
 
-Let's learn the instruction rule by this example, as we just done before, we create a file and tag a instruction named `HLContainerPage`. The `Prefix` of this instruction here is `HL`, and all the `Prefix` call `HL` permanent. And go on we see the `Scope` called `Container`, byt the way, other two `Scopes` is `Component` and `Create`. Final part of the instruction is `Type`, which the specific function you want to do. The `type` of `HLContainerPage` is `Page` means you will generate the page template code in the file.
+现在解释一下指令的三部分：
 
-### All Snippets List
+- `prefix`： 前缀，固定是 `LK` 开头的，以免和其他插件的指令混淆。
+- `scope`： 作用域，就是三种类型的脚本，分别是 `Container` —— 文件脚本，`Component` —— 组件脚本， `Create` —— 碎片脚本
+- `type`： 脚本类型，就是指改作用域下的脚本类型，比如 `Container` 下的 `Page` 就是生成新页面文件的模板代码，`Container` 下的 `Store` 则是生成新Store文件的模板代码
 
-The table below list all the snippets and instruction.
+
+### 所有的脚本列表
+
+下面的表格展示了所有类型的脚本和简单的使用说明
 
 #### Container Snippets:
 
 Snippets Name | Instruction
 ---|---
-HLContainerPage | generate **page** template code
-HLContainerFormConfig | generate **form** config template code
-HLContainerTableColumns | generate **table** Columns template code
-HLContainerFormField | generate **formField** template code
-HLContainerQueryConditionsConfig | generate **QueryCondition** config template code
-HLContainerStore | generate **observable store** template code
+LKContainerPage | 生成 **页面** 模板代码
+LKContainerFormConfig | 生成 **表单** 配置项 模板代码
+LKContainerTableColumns | 生成 **表格** 配置项 模板代码
+LKContainerStore | 生成 **store** 模板代码
 
 #### Component Snippets
 
 Snippets Name | Instruction
 ---|---
-HLComponentForm | generate **form** template code
-HLComponentModal | generate **modal** template code
-HLComponentQRCoe | generate **QRCode** template code
-HLComponentTable | generate **table** template code
-HLComponentSelectTable | generate **selectable** template code
-HLComponentQueryConditions | generate **QueryConditions** template code
-HLComponentBaiduMap | generate **BaiduMap** template code
-HLComponentPrint | generate **Print** template code
+LKComponentForm | 生成 **表单** 模板代码
+LKComponentModal | 生成 **模态框** 模板代码
+<!-- LKComponentQRCoe | 生成 **QRCode** 模板代码 -->
+LKComponentTable | 生成 **表格** 模板代码
+LKComponentMap | 生成 **地图** 模板代码
 
 #### Creator Snippets
 
-Service Creator Snippets:
+接口的代码模板 Creator Snippets:
 
 Snippets Name | Instruction
 ---|---
-HLCreateGetService | generate **get service** template code
-HLCreatePostService | generate **post service** template code
+LKCreateGetService | 生成 **get 接口** 模板代码
+LKCreatePostService | 生成 **post 接口** 模板代码
+LKCreatePutService | 生成 **put 接口** 模板代码
+LKCreateDeleteService | 生成 **delete 接口** 模板代码
+LKCreatePatchService | 生成 **patch 接口** 模板代码
+LKCreateUpdateService | 生成 **update 接口** 模板代码
 
-Table Creator Snippets:
-
-Snippets Name | Instruction
----|---
-HLCreateTableColumnsItem | generate **table columns item** template code
-
-Form Field Creator Snippets:
+表格脚本:
 
 Snippets Name | Instruction
 ---|---
-HLCreateFormFieldRule | generate **form field rule** template code
-HLCreateFormFieldExtendRule | generate **form field extend rule** template code
-HLCreateTextFormField | generate **text form field** template code
-HLCreateInputFormField | generate **input form field** template code
-HLCreateSwitchFormField | generate **switch form field** template code
-HLCreateNumberInputFormField | generate **numberInput form field** template code
-HLCreateMultipleSelectFormField | generate **multipleSelect form field** template code
-HLCreateSelectPageFormField | generate **selectPage form field** template code
-HLCreateDatePickerFormField | generate **datePicker form field** template code
-HLCreateUploadFormField | generate **uploadForm form field** template code
-HLCreateHiddenFormField | generate **hidden form field** template code
-HLCreateExtraFormField | generate **extra form field** template code
-HLCreateCustomFormField | generate **custom form field** template code
+LKCreateTableColumnsConfig | 生成 **表格配置项** 模板代码
+LKCreateTableCustomColumnsConfig | 生成 **自定义表格配置项** 模板代码
 
-> **Hidden Form Field:** means the formField that don't show in the UI but needed to send to the backend interface.
-
-> **Extra Form Field:** means the formField that show in the UI but not necessary to send the backend interface.
-
-> **Custom Form Field:** means maximum custom property show in the template code, like `regex`, `validator`, etc.
-
-Form Item Creator Snippets:
+表单项脚本:
 
 Snippets Name | Instruction
 ---|---
-HLCreateInputFormItem | generate **text form item** template code
-HLCreateNumberInputFormItem | generate **numberInput form item** template code
-HLCreateTextAreaFormItem | generate **textarea form item** template code
-HLCreateRadioButtonFormItem | generate **radio button form item** template code
-HLCreateSwitchFormItem | generate **switch form item** template code
-HLCreateDatePickerFormItem | generate **datePicker form item** template code
-HLCreateSelectFormItem | generate **select form item** template code
-HLCreateSearchSelectFormItem | generate **searchSelect form item** template code
-HLCreateUploadFormItem | generate **upload form item** template code
-HLCreateCustomFormItem | generate **custom form item** template code
-
-QueryCondition Creator Snippet
-
-Snippets Name | Instruction
----|---
-HLCreateQCInputConfig | generate **input queryCondition item** template code
-HLCreateQCInputNumberConfig | generate **input number queryCondition item** template code
-HLCreateQCTextAreaConfig | generate **textArea queryCondition item** template code
-HLCreateQCSelectConfig | generate **select queryCondition item** template code
-HLCreateQCRadioButtonConfig | generate **radio button queryCondition item** template code
-HLCreateQCCheckBoxConfig | generate **checkBox queryCondition item** template code
-HLCreateQCDateConfig | generate **date queryCondition item** template code
-HLCreateQCDatePickerConfig | generate **date picker queryCondition item** template code
+LKCreateInputFormField | 生成 **输入框表单项** 模板代码
+LKCreateSwitchFormField | 生成 **开关表单项** 模板代码
+LKCreateInputNumberFormField | 生成 **数字输入框表单项** 模板代码
+LKCreateSelectFormField | 生成 **下拉表单项** 模板代码
+LKCreateDatePickerFormField | 生成 **日期表单项** 模板代码
+LKCreateRadioGroupFormField | 生成 **单选表单项** 模板代码
+LKCreateCheckboxGroupFormField | 生成 **多选表单项** 模板代码
+LKCreateTextAreaFormField | 生成 **多行文本表单项** 模板代码
+LKCreateTimePickerFormField | 生成 **时间选择器表单项** 模板代码
+LKCreateCascaderFormField | 生成 **多级下拉表单项** 模板代码
 
 ## Generate Model Code
 
 <p align="center">
-  <img width="1440" src="https://raw.githubusercontent.com/kunkuntang/HL_VSCode_Snippets/master/images/create-model.gif" />
+  <img width="1440" src="https://raw.githubusercontent.com/kunkuntang/LK_VSCode_Snippets/master/images/create-model.gif" />
 </p>
 
-First copy the JSON data from the service interface, and press F1 or Ctrl + Shift + P trigger the command panel of VsCode, then enter the `HL Create Model` instruction and input the model name(default use the text of the current selection in the active editor of VsCode), finally you will see the code generated at the file.
+首先拷贝一个接口的 JOSN 数据，按 F1 或者 Ctrl + Shift + P 调出控制面板，输入 `LK Create Model` 命令，然后输入想要生成的 model 名称，最后按回车后就可以生成出 model 的代码。
 
-> if the model name is hard to text you can copy that model name and paste in the file, then select the name and continue trigger the `HL Create Model` instruction.
 
-> You can use the `REST Client` VsCode plugin help you to get the response JSON string from the backend interface.
+> 如果觉得输入的 model 的名称太长，可以先把 model 的名称复制到文件中，然后选中这个单词（在执行 `LK Create Model` 指令的的时候会默认填充选中的文本），再进行生成 model 操作。
+
+> 可以使用 REST Client 插件来帮助你快速复制接口返回的 JSON 数据。
 
 ## Requirements
 
@@ -155,7 +123,7 @@ Visual Studio Code version is above `^1.34.0`.
 
 ## Release Notes
 
-This is the first publishing of HLSnippets.
+This is the first publishing of LKSnippets.
 
 ### 0.0.1
 
