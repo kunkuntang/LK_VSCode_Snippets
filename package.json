@@ -35,28 +35,16 @@
         "path": "./snippets/LKContainerSnippets.json"
       },
       {
-        "language": "typescriptreact",
-        "path": "./snippets/HLQueryConditionSnippets.json"
-      },
-      {
-        "language": "typescriptreact",
-        "path": "./snippets/HLFormItemSnippets.json"
-      },
-      {
         "language": "typescript",
         "path": "./snippets/LKFormFieldSnippets.json"
       },
       {
         "language": "typescriptreact",
-        "path": "./snippets/HKSnippets.json"
+        "path": "./snippets/LKSnippets.json"
       },
       {
         "language": "typescript",
-        "path": "./snippets/HKSnippets.json"
-      },
-      {
-        "language": "typescriptreact",
-        "path": "./snippets/LKConfigSnippets.json"
+        "path": "./snippets/LKSnippets.json"
       }
     ]
   },

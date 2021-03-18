@@ -1,5 +1,5 @@
 {
-  "Lk Create Page Container": {
+  "LK Create Page Container": {
     "prefix": "LKContainerPage",
     "body": [
       "import { Component, Vue } from \"vue-property-decorator\";",
@@ -19,7 +19,7 @@
     "description": "LK Create Page Container"
   },
 
-  "HL Create Form Config Container": {
+  "LK Create Form Config Container": {
     "prefix": "LKContainerFormConfig",
     "body": [
       "const lkFormItemUtils = new LkFormItemUtils()",
@@ -69,37 +69,6 @@
       "}"
     ],
     "description": "创建表格列模板代码"
-  },
-
-  "Create HL QueryConditions Config": {
-    "prefix": "HLContainerQueryConditionsConfig",
-    "body": [
-      "import { IQuery } from 'hoolinks-legion-design/lib/typings/components';",
-      "",
-      "export const ${1:QueryConditionName} = (_this: ${2:PageClass}): Array<IQuery> => {",
-      "    return [",
-      "    ${0}",
-      "        {",
-      "            container: {",
-      "                position: 'right',",
-      "                component: {",
-      "                    hooks: [",
-      "                        {",
-      "                            name: 'onSearch',",
-      "                            handle: (value, viewModel) => {},",
-      "                        },",
-      "                        {",
-      "                            name: 'onReset',",
-      "                            handle: (value, viewModel) => {},",
-      "                        },",
-      "                    ],",
-      "                },",
-      "            },",
-      "        },",
-      "    ];",
-      "}"
-    ],
-    "description": "HL Create QueryConditions Config"
   },
 
   "Create LK Store Container": {
