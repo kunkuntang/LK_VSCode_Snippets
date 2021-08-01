@@ -11,7 +11,8 @@
     "Snippets"
   ],
   "activationEvents": [
-    "onCommand:extension.createModel"
+    "onCommand:extension.createModel",
+    "onCommand:extension.createTask"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -19,6 +20,10 @@
       {
         "command": "extension.createModel",
         "title": "Lk Create Data Model"
+      },
+      {
+        "command": "extension.createTask",
+        "title": "Lk Create A Task"
       }
     ],
     "snippets": [
@@ -62,6 +67,18 @@
         "language": "typescriptreact",
         "path": "./snippets/LKConfigSnippets.json"
       }
+    ],
+    "configuration":[
+      {
+        "title": "lk-vscode-snippets",
+        "properties": {
+          "lkVscodeSnippets.taskList": {
+            "type":"array",
+            "default": "['111']",
+            "description": "当前存在的任务列表"
+          }
+        }
+      }
     ]
   },
   "scripts": {
@@ -80,19 +97,20 @@
     "url": "https://github.com/kunkuntang/Lk_VSCode_Snippets"
   },
   "devDependencies": {
-    "@types/vscode": "^1.51.0",
     "@types/glob": "^7.1.3",
     "@types/mocha": "^8.0.0",
     "@types/node": "^12.11.7",
-    "eslint": "^7.9.0",
+    "@types/vscode": "^1.51.0",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
+    "eslint": "^7.9.0",
     "glob": "^7.1.6",
     "mocha": "^8.1.3",
+    "ts-loader": "^8.0.3",
     "typescript": "^4.0.2",
     "vscode-test": "^1.4.0",
-    "ts-loader": "^8.0.3",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
-  }
+  },
+  "dependencies": {}
 }
