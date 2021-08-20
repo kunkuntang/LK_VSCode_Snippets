@@ -200,7 +200,7 @@ export class ModelCreator {
             tempClassArr.push(`    ${key} = null;`);
             tempClassArr.push('');
           } else if (Array.isArray(data[key])) {
-            tempClassArr.push(`    @DataMapper('${key}')`);
+            tempClassArr.push(`    @DataMapper({ clazz: ${upperFirstCase(key)}M, name: '${key}' })`);
             // 如果不是一个空数组
             if (data[key][0] !== undefined) {
               tempClassArr.push(`    ${key}:${upperFirstCase(key)}M[] = [];`);
