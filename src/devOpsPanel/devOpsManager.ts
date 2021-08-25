@@ -33,6 +33,9 @@ export class LkDevOpsManager {
       placeHolder: "请输入新任务名称",
     });
     console.log("createTask: taskName" + taskName);
+    if (!taskName) {
+      return;
+    }
     /**
      * 每次新建任务时
      * 1. 从 master 分支上迁出新的 feature/* 分支
@@ -58,7 +61,7 @@ export class LkDevOpsManager {
   }
 
   finishTask() {
-    /** 
+    /**
      * 每次完成任务时
      * 1. 合并 master 分支
      * 2. 推送当前分支

@@ -3,7 +3,9 @@
 import * as vscode from "vscode";
 import { ModelCreator } from "./modelCreator";
 import { showInputBox } from "./baseInput";
-import { LkDevOpsManager } from "./CreateTask";
+import { LkDevOpsManager } from "./devOpsPanel/devOpsManager";
+import { DevOpsPanel } from "./devOpsPanel/devOpsPanel";
+import { SidebarProvider } from "./sidebarPanel/sidebarProvider";
 
 const lkDevOpsManager = new LkDevOpsManager();
 
@@ -75,6 +77,34 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  let openTaskManagerPanel = vscode.commands.registerCommand(
+    "extension.openTaskPanel",
+    async function () {
+      DevOpsPanel.createOrShow(context.extensionUri);
+    }
+  );
+
+  let sidebarPanel = vscode.window.registerWebviewViewProvider(
+    "lk-gitlab-sidebar",
+    new SidebarProvider(context.extensionUri)
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("LkGitlabTools.refresh", async () => {
+      await vscode.commands.executeCommand("workbench.action.closeSidebar");
+      await vscode.commands.executeCommand(
+        "workbench.view.extension.lk-gitlab-sidebar-view"
+      );
+      setTimeout(() => {
+        vscode.commands.executeCommand(
+          "workbench.action.webview.openDeveloperTools"
+        );
+      }, 500);
+    })
+  );
+
   context.subscriptions.push(disposable);
   context.subscriptions.push(createTask);
+  context.subscriptions.push(openTaskManagerPanel);
+  context.subscriptions.push(sidebarPanel);
 }
