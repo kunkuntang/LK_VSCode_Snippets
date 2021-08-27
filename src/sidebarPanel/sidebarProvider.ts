@@ -22,6 +22,23 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     webviewView.webview.onDidReceiveMessage(async (data) => {
       console.log("data", data);
       switch (data.command) {
+        case "setAccessToken": {
+          if (!data.value) {
+            return;
+          }
+          const config = vscode.workspace.getConfiguration("lk-vscode-gitlab");
+          config.update("gitlabAccessToken", data.value, true);
+          break;
+        }
+        case "getAccessToken": {
+          const config = vscode.workspace.getConfiguration("lk-vscode-gitlab");
+          const gitlabAccessToken = config.get("gitlabAccessToken");
+          webviewView.webview.postMessage({
+            method: data.command,
+            value: gitlabAccessToken,
+          });
+          break;
+        }
         case "onInfo": {
           if (!data.value) {
             return;
@@ -59,11 +76,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     );
     const scriptUri = webview.asWebviewUri(
       // vscode.Uri.joinPath(this._extensionUri, "out", "compiled/sidebar.js")
-      vscode.Uri.joinPath(this._extensionUri, "build", "sidebar.js")
+      vscode.Uri.joinPath(this._extensionUri, "sidebar", "dist", "umi.js")
     );
     const styleMainUri = webview.asWebviewUri(
-      vscode.Uri.joinPath(this._extensionUri, "media", "sidebar.css")
-      // vscode.Uri.joinPath(this._extensionUri, "out", "compiled/sidebar.css")
+      // vscode.Uri.joinPath(this._extensionUri, "out", "compiled/sidebar.js")
+      vscode.Uri.joinPath(this._extensionUri, "sidebar", "dist", "umi.css")
     );
 
     // Use a nonce to only allow a specific script to be run.
@@ -82,14 +99,14 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     <link href="${styleResetUri}" rel="stylesheet">
     <link href="${styleVSCodeUri}" rel="stylesheet">
     <link href="${styleMainUri}" rel="stylesheet">
-    <script nonce="${nonce}" src="${scriptUri}"></script>
     <script nonce="${nonce}">
       const tsvscode = acquireVsCodeApi();
     </script>
     </head>
     <body>
-      <div id="app1"></div>
+      <div id="root"></div>
     </body>
+    <script nonce="${nonce}" src="${scriptUri}"></script>
     </html>`;
   }
 }
