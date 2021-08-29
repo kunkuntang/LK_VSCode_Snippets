@@ -1,66 +1,133 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
+import Avatar from './components/Avatar';
+import Login from './login/login';
+
 import styles from './index.less';
+import { history } from '@/.umi/core/history';
 
-export default function IndexPage() {
-  const [accessToken, setAccessToken] = useState('');
+export class UserInfoModel {
+  avatar_url = '';
+  email = '';
+  id = -1;
+  name = '';
+  username = '';
+  web_url = '';
+}
 
-  useEffect(() => {
+function useAccessTokenHooks(
+  initialAccessToken = '',
+  initialUserInfo = new UserInfoModel(),
+) {
+  const [accessToken, setAcToken] = useState(initialAccessToken);
+  const [userInfo, setUserInfo] = useState(initialUserInfo);
+
+  function _getAccessToken() {
     tsvscode.postMessage({
       command: 'getAccessToken',
     });
-  }, []);
+  }
+
+  function _setAccessToken(accessToken: string) {
+    _getUserInfo(accessToken);
+  }
+
+  function _getUserInfo(accessToken?: string) {
+    tsvscode.postMessage({
+      command: 'getUserInfo',
+      value: accessToken,
+    });
+  }
 
   window.addEventListener('message', (event) => {
     const data = event.data as PostMessageParams;
-    console.log('mess', data);
-    if (data.value) {
-      setAccessToken(data.value);
+    console.log('message from vscode', data);
+    if (data.command === 'getAccessToken') {
+      if (data.value) {
+        setAcToken(data.value);
+      } else {
+        // TODO 比如 token 出错
+        setAcToken('');
+      }
+    }
+    if (data.command === 'getUserInfo') {
+      if (data.value) {
+        setUserInfo(data.value);
+        window.userInfo = data.value;
+      } else {
+        // TODO 比如 token 出错
+        setUserInfo(new UserInfoModel());
+        window.userInfo = new UserInfoModel();
+      }
     }
   });
 
-  const hanldeSetAccessToken = function () {
-    console.log('accessToken', accessToken);
-    tsvscode.postMessage({
-      command: 'setAccessToken',
-      value: accessToken,
-    });
+  return {
+    accessToken,
+    setAccessToken: _setAccessToken,
+    getAccessToken: _getAccessToken,
+    userInfo,
+    getUserInfo: _getUserInfo,
   };
+}
+
+function getProjectInfo() {
+  tsvscode.postMessage({
+    command: 'getCurrentProjectInfo',
+  });
+
+  window.addEventListener('message', (event) => {
+    const data = event.data as PostMessageParams;
+    console.log('message from getCurrentProjectInfo', data);
+    if (data.command === 'getCurrentProjectInfo') {
+      window.projectInfo = data.value;
+    }
+  });
+}
+
+export default function IndexPage() {
+  const { accessToken, setAccessToken, getAccessToken, userInfo, getUserInfo } =
+    useAccessTokenHooks();
+
+  useEffect(() => {
+    getAccessToken();
+    getProjectInfo();
+  }, []);
+
+  useEffect(() => {
+    if (accessToken) {
+      getUserInfo();
+    }
+  }, [accessToken]);
+
+  function goToCreateFeature() {
+    history.push('/feature/add');
+  }
+
+  function handleCreateFxied() {
+    history.push('/fixed/add');
+  }
 
   return (
     <div>
       <h1 className={styles.title}>lk-vscode-gitlab</h1>
 
-      <div className={styles['avatar']}>
-        <img></img>
-      </div>
-
-      <div style={{ display: accessToken ? 'none' : 'block'}}>
-        <div className={styles['set-access-token-title']}>
-          当前还没有设置 gitlab access token
-        </div>
-
-        <input
-          className={styles['access-token-input']}
-          onChange={(e) => {
-            setAccessToken(e.target.value);
-          }}
-        ></input>
-        <button
-          className={styles['set-access-token-btn']}
-          onClick={hanldeSetAccessToken}
-        >
-          设置
-        </button>
-        <div className={styles['set-access-token-help-con']}>
-          <a href="https://git.liankaa.com/help/user/profile/personal_access_tokens.md">
-            帮助指引
-          </a>
-          <a href="https://git.liankaa.com/-/profile/personal_access_tokens">
-            gitlab_access_tokens
-          </a>
-        </div>
-      </div>
+      <Avatar userInfo={userInfo}></Avatar>
+      {accessToken ? (
+        <>
+          <div className={styles['task-btn-con']}>
+            <button onClick={goToCreateFeature}>添加新功能</button>
+          </div>
+          <div className={styles['task-btn-con']}>
+            <button onClick={handleCreateFxied}>添加新修复</button>
+          </div>
+        </>
+      ) : (
+        <Login
+          accessToken={accessToken}
+          setAccessToken={setAccessToken}
+        ></Login>
+      )}
     </div>
   );
 }

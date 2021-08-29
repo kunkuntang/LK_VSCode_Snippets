@@ -105,3 +105,31 @@ input::placeholder,
 textarea::placeholder {
   color: var(--vscode-input-placeholderForeground);
 }
+
+select,
+option {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  border: none;
+  font-family: var(--vscode-font-family);
+  padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+  color: var(--vscode-input-foreground) !important;
+  outline-color: var(--vscode-input-border);
+  background-color: var(--vscode-input-background);
+}
+
+.ant-form-item-label > label {
+  color: #fff !important;
+}
+
+.ant-form-item-has-error
+  :not(.ant-input-disabled):not(.ant-input-borderless).ant-input,
+.ant-form-item-has-error
+  :not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper,
+.ant-form-item-has-error
+  :not(.ant-input-disabled):not(.ant-input-borderless).ant-input:hover,
+.ant-form-item-has-error
+  :not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper:hover {
+  background-color: var(--vscode-input-background) !important;
+}

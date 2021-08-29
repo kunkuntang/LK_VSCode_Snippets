@@ -6,6 +6,8 @@ export default defineConfig({
   },
   routes: [
     { path: '/', component: '@/pages/index' },
+    { path: '/feature/add', component: '@/pages/task/createFeature' },
+    { path: '/fixed/add', component: '@/pages/task/createFixed' },
   ],
   fastRefresh: {},
   history: {
@@ -13,7 +15,7 @@ export default defineConfig({
   },
   devServer: {
     // 需要在 dev 时写文件到输出目录，这样保证开发阶段有 js/css 文件
-    writeToDisk: filePath =>
-      ['umi.js', 'umi.css'].some(name => filePath.endsWith(name)),
+    writeToDisk: (filePath) =>
+      ['umi.js', 'umi.css'].some((name) => filePath.endsWith(name)),
   },
 } as IConfig);
