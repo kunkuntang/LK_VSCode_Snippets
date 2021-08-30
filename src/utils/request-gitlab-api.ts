@@ -49,6 +49,26 @@ export function getCurrentUserInfo(accessToken?: string) {
     });
 }
 
+export function getProjectInfoByName(name: string) {
+  return request
+    .get(`/projects?search=${name}&simple=true`, {
+      headers: {
+        "PRIVATE-TOKEN": gitlabAccessToken,
+      },
+    })
+    .then((res) => {
+      if (res.status === 200 && res.data) {
+        if (res.data.length === 1) {
+          return res.data[0];
+        }
+        return res.data;
+      } else {
+        handleNetworkError(res);
+        return null;
+      }
+    });
+}
+
 function getProjectId() {}
 
 export const getProjectIssue = function () {

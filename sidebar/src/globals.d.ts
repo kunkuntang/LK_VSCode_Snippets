@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 interface IProjectInfo {
   pkg: any;
   workspace: vscode.WorkspaceFolder | null;
+  gitlabProjectInfo: any;
 }
 
 declare global {

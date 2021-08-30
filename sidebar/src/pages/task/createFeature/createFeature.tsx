@@ -35,10 +35,25 @@ export default function CreateFeature() {
       <Avatar userInfo={userInfo}></Avatar>
 
       <div style={{ color: '#fff' }}>
+        <h2 style={{ color: '#fff' }}>当前项目</h2>
+        <h3 style={{ color: '#fff' }}>
+          {window.projectInfo && (
+            <a href={window.projectInfo.gitlabProjectInfo.web_url || ''}>
+              {window.projectInfo.workspace?.name ||
+                window.projectInfo.gitlabProjectInfo.name ||
+                ''}
+            </a>
+          )}
+        </h3>
+      </div>
+
+      <div style={{ color: '#fff' }}>
         <h2 style={{ color: '#fff' }}>创建新功能</h2>
         <ul>
           <li>在本地和远端创建同名的 feature 分支</li>
-          <li>在 gitlab 上创建同名的 issue 和 merge_request，并关联到当前迭代</li>
+          <li>
+            在 gitlab 上创建同名的 issue 和 merge_request，并关联到当前迭代
+          </li>
         </ul>
       </div>
 

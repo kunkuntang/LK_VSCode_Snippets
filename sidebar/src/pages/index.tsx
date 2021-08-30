@@ -78,8 +78,8 @@ function getProjectInfo() {
 
   window.addEventListener('message', (event) => {
     const data = event.data as PostMessageParams;
-    console.log('message from getCurrentProjectInfo', data);
     if (data.command === 'getCurrentProjectInfo') {
+      console.log('message from getCurrentProjectInfo', data);
       window.projectInfo = data.value;
     }
   });
