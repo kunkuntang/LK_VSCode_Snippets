@@ -1,6 +1,9 @@
 import * as vscode from "vscode";
 import { getCurrentProjectInfo } from "../utils/indext";
-import { getCurrentUserInfo } from "../utils/request-gitlab-api";
+import {
+  getCurrentMileStones,
+  getCurrentUserInfo,
+} from "../utils/request-gitlab-api";
 import { getNonce } from "./getNonce";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
@@ -43,7 +46,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                 vscode.workspace.getConfiguration("lk-vscode-gitlab");
               config.update("gitlabAccessToken", data.value, true);
               webviewView.webview.postMessage({
-                command: 'getAccessToken',
+                command: "getAccessToken",
                 value: data.value,
               });
             }
@@ -68,6 +71,13 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           });
           break;
         }
+        case "getCurrentMileStones": {
+          const currentMileStones = await getCurrentMileStones();
+          webviewView.webview.postMessage({
+            command: data.command,
+            value: currentMileStones,
+          });
+        }
         case "onInfo": {
           if (!data.value) {
             return;
@@ -90,8 +100,6 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         }
       }
     });
-
-
   }
 
   public revive(panel: vscode.WebviewView) {

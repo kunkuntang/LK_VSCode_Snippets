@@ -2,20 +2,49 @@ import { history } from '@/.umi/core/history';
 import Avatar from '@/pages/components/Avatar';
 import { Form, Input, Button, Select } from 'antd';
 import React from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import styles from './createFeature.less';
-
-const { Option } = Select;
 
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
 };
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 },
-};
+
+function getCurrentMileStonesHooks() {
+  const [mileStonesList, setMileStonesList] = useState([]);
+
+  function _getMileStonesList() {
+    tsvscode.postMessage({
+      command: 'getCurrentMileStones',
+    });
+  }
+
+  window.addEventListener('message', function (event) {
+    const data = event.data as PostMessageParams;
+    if (data.command === 'getCurrentMileStones') {
+      if (data.value) {
+        console.log('data.value', data.value);
+        setMileStonesList(data.value);
+      } else {
+        setMileStonesList([]);
+      }
+    }
+  });
+
+  return {
+    mileStonesList,
+    getMileStonesList: _getMileStonesList,
+  };
+}
 
 export default function CreateFeature() {
-  function handleCreateFeature() {}
+  const { mileStonesList, getMileStonesList } = getCurrentMileStonesHooks();
+
+  useEffect(() => {
+    getMileStonesList();
+  }, []),
+    function handleCreateFeature() {};
   const userInfo = window.userInfo;
 
   const [form] = Form.useForm();
@@ -78,13 +107,13 @@ export default function CreateFeature() {
         <Form.Item
           className={styles['form-item']}
           name="name"
-          label="关联迭代"
-          rules={[{ required: true, message: '关联迭代必填' }]}
+          label="关联里程碑"
+          rules={[{ required: true, message: '关联里程碑必填' }]}
         >
           <select placeholder="Select a option and change input text above">
-            <option value="male">male</option>
-            <option value="female">female</option>
-            <option value="other">other</option>
+            {mileStonesList.map((item: any) => {
+              return <option value={item.id} key={item.id}>{item.title}</option>;
+            })}
           </select>
         </Form.Item>
         <Form.Item

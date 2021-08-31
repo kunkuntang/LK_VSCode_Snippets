@@ -69,6 +69,23 @@ export function getProjectInfoByName(name: string) {
     });
 }
 
+export function getCurrentMileStones() {
+  return request
+    .get(`/groups/24/milestones?state=active`, {
+      headers: {
+        "PRIVATE-TOKEN": gitlabAccessToken,
+      },
+    })
+    .then((res) => {
+      if (res.status === 200 && res.data) {
+        return res.data;
+      } else {
+        handleNetworkError(res);
+        return null;
+      }
+    });
+}
+
 function getProjectId() {}
 
 export const getProjectIssue = function () {
