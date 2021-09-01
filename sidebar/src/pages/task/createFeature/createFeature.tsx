@@ -6,6 +6,18 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import styles from './createFeature.less';
 
+const { Option } = Select;
+
+interface ICreateFeatureFormData {
+  milestone_id: number;
+  name: string;
+  tapd: string;
+}
+
+interface ICreateFeatureModel extends ICreateFeatureFormData {
+  project_id: number;
+}
+
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
@@ -20,8 +32,8 @@ function getCurrentMileStonesHooks() {
     });
   }
 
-  window.addEventListener('message', function (event) {
-    const data = event.data as PostMessageParams;
+  function _setMileStonesList(event: MessageEvent<PostMessageParams>) {
+    const data = event.data;
     if (data.command === 'getCurrentMileStones') {
       if (data.value) {
         console.log('data.value', data.value);
@@ -30,27 +42,52 @@ function getCurrentMileStonesHooks() {
         setMileStonesList([]);
       }
     }
-  });
+  }
 
   return {
     mileStonesList,
     getMileStonesList: _getMileStonesList,
+    setMileStonesList: _setMileStonesList,
   };
 }
 
+function createFeatureHooks() {}
+
 export default function CreateFeature() {
-  const { mileStonesList, getMileStonesList } = getCurrentMileStonesHooks();
+  const { mileStonesList, getMileStonesList, setMileStonesList } =
+    getCurrentMileStonesHooks();
 
   useEffect(() => {
     getMileStonesList();
-  }, []),
-    function handleCreateFeature() {};
+    window.addEventListener('message', setMileStonesList);
+    window.addEventListener('message', handleCreateFeature);
+    return () => {
+      window.removeEventListener('message', setMileStonesList);
+      window.removeEventListener('message', handleCreateFeature);
+    };
+  }, []);
   const userInfo = window.userInfo;
 
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
+  function handleCreateFeature(event: MessageEvent<PostMessageParams>) {
+    const data = event.data;
+    if (data.command === 'createFeature') {
+      if (data.value) {
+        history.goBack();
+      }
+    }
+  }
+
+  const onFinish = (values: ICreateFeatureFormData) => {
     console.log(values);
+    tsvscode.postMessage({
+      command: 'createFeature',
+      value: {
+        ...values,
+        project_id: window.projectInfo.gitlabProjectInfo.id,
+      },
+    });
   };
 
   const onCancel = () => {
@@ -106,15 +143,19 @@ export default function CreateFeature() {
         </Form.Item>
         <Form.Item
           className={styles['form-item']}
-          name="name"
+          name="milestone_id"
           label="关联里程碑"
           rules={[{ required: true, message: '关联里程碑必填' }]}
         >
-          <select placeholder="Select a option and change input text above">
+          <Select>
             {mileStonesList.map((item: any) => {
-              return <option value={item.id} key={item.id}>{item.title}</option>;
+              return (
+                <Option value={item.id} key={item.id}>
+                  {item.title}
+                </Option>
+              );
             })}
-          </select>
+          </Select>
         </Form.Item>
         <Form.Item
           className={styles['form-item']}

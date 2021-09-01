@@ -1,8 +1,13 @@
 import * as vscode from "vscode";
-import { getCurrentProjectInfo } from "../utils/indext";
 import {
-  getCurrentMileStones,
-  getCurrentUserInfo,
+  createLocalFeatureGitBranch,
+  getCurrentProjectInfo,
+} from "../utils/indext";
+import {
+  createIssueService as createIssueService,
+  createMergeRequestService,
+  getCurrentMileStonesService,
+  getCurrentUserInfoService,
 } from "../utils/request-gitlab-api";
 import { getNonce } from "./getNonce";
 
@@ -39,7 +44,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         case "getUserInfo": {
           try {
             // 如果有传 accessToken ，则代表登录，用传入的 accessToken 先验证合法性
-            const userInfo = await getCurrentUserInfo(data.value);
+            const userInfo = await getCurrentUserInfoService(data.value);
             console.log("user info", userInfo);
             if (data.value) {
               const config =
@@ -72,11 +77,46 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           break;
         }
         case "getCurrentMileStones": {
-          const currentMileStones = await getCurrentMileStones();
+          const currentMileStones = await getCurrentMileStonesService();
           webviewView.webview.postMessage({
             command: data.command,
             value: currentMileStones,
           });
+          break;
+        }
+        case "createFeature": {
+          let createFlag = true;
+          try {
+            // 1. 本地创建一个 feature/[功能名称] 分支
+            const createNewBranchResult = await createLocalFeatureGitBranch(
+              data.value
+            );
+            if (!createNewBranchResult) {
+              throw new Error("创建新分支失败");
+            }
+            // 2. gitlab 创建一个 Issue，并且关联当前的迭代
+            const createIssueResult = await createIssueService(data.value);
+            if (!createIssueResult) {
+              throw new Error("创建新 Issue 失败");
+            }
+            // 3. gitlab 创建一个 MR，并且关联刚创建的 Issue
+            const createMergeRequestResult = await createMergeRequestService({
+              ...data.value,
+              issueId: createIssueResult.iid,
+            });
+            if (!createMergeRequestResult) {
+              throw new Error("创建新 Merge_Request 失败");
+            }
+          } catch (error) {
+            createFlag = false;
+          } finally {
+            vscode.window.showInformationMessage("创建新功能成功");
+            webviewView.webview.postMessage({
+              command: data.command,
+              value: createFlag,
+            });
+          }
+          break;
         }
         case "onInfo": {
           if (!data.value) {

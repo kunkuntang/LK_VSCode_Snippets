@@ -133,3 +133,9 @@ option {
   :not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper:hover {
   background-color: var(--vscode-input-background) !important;
 }
+
+.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  background-color: var(--vscode-input-background) !important;
+  color: var(--vscode-input-foreground);
+  border: none;
+}
