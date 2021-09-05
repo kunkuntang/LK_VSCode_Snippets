@@ -117,7 +117,9 @@ export function createIssueService(params: ICreateFeatureModel) {
     });
 }
 
-export function createMergeRequestService(params: ICreateFeatureModel & { issueId: number}) {
+export function createMergeRequestService(
+  params: ICreateFeatureModel & { issueId: number }
+) {
   const newBranchName = `feature/${params.name}`;
   return request
     .post(
@@ -126,9 +128,9 @@ export function createMergeRequestService(params: ICreateFeatureModel & { issueI
         id: params.project_id,
         source_branch: newBranchName,
         target_branch: "beta",
-        title: params.name,
+        title: "Draft: " + params.name,
         assignee_id: 10,
-        description: `Closed #${params.issueId}`,
+        description: [params.tapd, `Closed #${params.issueId}`].join("\n"),
         milestone_id: params.milestone_id,
         squash: true,
         remove_source_branch: false,
@@ -145,6 +147,61 @@ export function createMergeRequestService(params: ICreateFeatureModel & { issueI
         return res.data;
       } else {
         handleNetworkError(res, "创建新 Merge_Request ");
+        return false;
+      }
+    });
+}
+
+interface IGetProjectMRByUser {
+  project_id: number;
+  author_id: number;
+}
+
+export function getProjectMergeRequestByUser(params: IGetProjectMRByUser) {
+  return request
+    .get(
+      `/projects/${params.project_id}/merge_requests?author_id=${params.author_id}&state=opened`,
+      {
+        headers: {
+          "PRIVATE-TOKEN": gitlabAccessToken,
+        },
+      }
+    )
+    .then((res) => {
+      if (res.status === 200 && res.data) {
+        return res.data;
+      } else {
+        handleNetworkError(res, "查询当前项目的 Merge_Request ");
+        return false;
+      }
+    });
+}
+
+export interface IFinishFeature {
+  project_id: number;
+  merge_request_id: number;
+  merge_request_title: string;
+}
+
+export function finishProjectFeature(params: IFinishFeature) {
+  return request
+    .put(
+      `/projects/${params.project_id}/merge_requests/${params.merge_request_id}`,
+      {
+        id: params.project_id,
+        title: params.merge_request_title.replace("Draft: ", ""),
+      },
+      {
+        headers: {
+          "PRIVATE-TOKEN": gitlabAccessToken,
+        },
+      }
+    )
+    .then((res) => {
+      if (res.status === 200 && res.data) {
+        return res.data;
+      } else {
+        handleNetworkError(res, "完成项目功能 ");
         return false;
       }
     });

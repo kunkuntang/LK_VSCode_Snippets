@@ -1,13 +1,16 @@
 import * as vscode from "vscode";
 import {
   createLocalFeatureGitBranch,
+  deleteLocalFeatureGitBranch,
   getCurrentProjectInfo,
 } from "../utils/indext";
 import {
   createIssueService as createIssueService,
   createMergeRequestService,
+  finishProjectFeature,
   getCurrentMileStonesService,
   getCurrentUserInfoService,
+  getProjectMergeRequestByUser,
 } from "../utils/request-gitlab-api";
 import { getNonce } from "./getNonce";
 
@@ -110,10 +113,57 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           } catch (error) {
             createFlag = false;
           } finally {
-            vscode.window.showInformationMessage("创建新功能成功");
+            if (createFlag) {
+              vscode.window.showInformationMessage("创建新功能成功");
+              webviewView.webview.postMessage({
+                command: data.command,
+                value: createFlag,
+              });
+            }
+          }
+          break;
+        }
+        case "getCurrentMergeRequest": {
+          const currentMergeRequest = await getProjectMergeRequestByUser(
+            data.value
+          );
+          webviewView.webview.postMessage({
+            command: data.command,
+            value: currentMergeRequest,
+          });
+          break;
+        }
+        case "finishFeature": {
+          let finishFlag = true;
+          try {
+            const { is_delete_local_branch, source_branch, ...value } =
+              data.value as {
+                project_id: number;
+                merge_request_id: number;
+                merge_request_title: string;
+                is_delete_local_branch: boolean;
+                source_branch: string;
+              };
+            const finishResult = await finishProjectFeature(value);
+            if (!finishResult) {
+              finishFlag = false;
+              throw Error("无法完成功能，请手动操作");
+            }
+            if (is_delete_local_branch) {
+              const deleteResult = await deleteLocalFeatureGitBranch({
+                source_branch,
+              });
+              if (!deleteResult) {
+                finishFlag = false;
+                throw Error("无法删除本地分支，请手动操作");
+              }
+            }
+          } catch (error) {
+            vscode.window.showErrorMessage(error.message);
+          } finally {
             webviewView.webview.postMessage({
               command: data.command,
-              value: createFlag,
+              value: finishFlag,
             });
           }
           break;

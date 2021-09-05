@@ -139,3 +139,14 @@ option {
   color: var(--vscode-input-foreground);
   border: none;
 }
+.ant-switch {
+  width: 32px;
+  background-color: var(--vscode-input-background);
+}
+.ant-switch-checked {
+  background-color: #1890ff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--vscode-input-foreground);
+}

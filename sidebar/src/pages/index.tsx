@@ -104,8 +104,16 @@ export default function IndexPage() {
     history.push('/feature/add');
   }
 
-  function handleCreateFxied() {
+  function goToCreateFxied() {
     history.push('/fixed/add');
+  }
+
+  function goToFinishFeature() {
+    history.push('/feature/finish');
+  }
+
+  function goToFinishFixed() {
+    history.push('/fixed/finish');
   }
 
   return (
@@ -119,7 +127,18 @@ export default function IndexPage() {
             <button onClick={goToCreateFeature}>添加新功能</button>
           </div>
           <div className={styles['task-btn-con']}>
-            <button onClick={handleCreateFxied}>添加新修复</button>
+            <button onClick={goToCreateFxied}>添加新修复</button>
+          </div>
+
+          <div
+          className={styles['task-btn-divider']}
+          ></div>
+
+          <div className={styles['task-btn-con']}>
+            <button onClick={goToFinishFeature}>完成新功能</button>
+          </div>
+          <div className={styles['task-btn-con']}>
+            <button onClick={goToFinishFixed}>完成新修复</button>
           </div>
         </>
       ) : (
