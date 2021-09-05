@@ -2,8 +2,13 @@
   "name": "lk-vscode-snippets",
   "displayName": "LK_VSCode_Snippets",
   "description": "This is extension for lk-components-antdv",
-  "version": "0.0.6",
+  "version": "0.0.3",
   "publisher": "kuntang",
+  "private": "true",
+  "license": "MIT",
+  "workspaces": [
+    "sidebar"
+  ],
   "engines": {
     "vscode": "^1.51.0"
   },
@@ -11,7 +16,11 @@
     "Snippets"
   ],
   "activationEvents": [
-    "onCommand:extension.createModel"
+    "onCommand:extension.createModel",
+    "onCommand:extension.createTask",
+    "onCommand:extension.openTaskPanel",
+    "onCommand:LkGitlabTools.refresh",
+    "onView:lk-gitlab-sidebar"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -19,8 +28,40 @@
       {
         "command": "extension.createModel",
         "title": "Lk Create Data Model"
+      },
+      {
+        "command": "extension.createTask",
+        "title": "Lk Create A Task"
+      },
+      {
+        "command": "extension.openTaskPanel",
+        "title": "Lk Open Task Panel"
+      },
+      {
+        "command": "LkGitlabTools.refresh",
+        "title": "Lk Gitlab Tools Refresh"
       }
     ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "lk-gitlab-sidebar-view",
+          "title": "lk-gitLab-tools",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "lk-gitlab-sidebar-view": [
+        {
+          "name": "lk-gitLab-tools",
+          "type": "webview",
+          "id": "lk-gitlab-sidebar",
+          "icon": "media/icon.svg",
+          "contextualTitle": "lk-gitLab-tools"
+        }
+      ]
+    },
     "snippets": [
       {
         "language": "typescriptreact",
@@ -46,13 +87,30 @@
         "language": "typescript",
         "path": "./snippets/LKSnippets.json"
       }
+    ],
+    "configuration": [
+      {
+        "title": "lk-vscode-gitlab",
+        "type": "object",
+        "properties": {
+          "lk-vscode-gitlab.gitlabAccessToken": {
+            "type": "string",
+            "default": "",
+            "description": "gitlab 的personal access token"
+          }
+        }
+      }
     ]
   },
   "scripts": {
     "vscode:prepublish": "yarn run package",
-    "compile": "webpack --devtool nosources-source-map --config ./build/node-extension.webpack.config.js",
-    "watch": "webpack --watch --devtool nosources-source-map --info-verbosity verbose --config ./build/node-extension.webpack.config.js",
-    "package": "webpack --mode production --config ./build/node-extension.webpack.config.js",
+    "compile": "webpack",
+    "watch": "webpack --mode development --watch",
+    "build:webview": "webpack --mode production --config webpack.react.config.js",
+    "dev:webview": "webpack serve --mode development --config webpack.react.config.js",
+    "sidebar-watch": "yarn workspace lk-vscode-gitlab-sidebar run start",
+    "sidebar-build": "yarn workspace lk-vscode-gitlab-sidebar run build",
+    "package": "webpack --mode production --devtool hidden-source-map",
     "test-compile": "tsc -p ./",
     "test-watch": "tsc -watch -p ./",
     "pretest": "yarn run test-compile && yarn run lint",
@@ -64,19 +122,32 @@
     "url": "https://github.com/kunkuntang/Lk_VSCode_Snippets"
   },
   "devDependencies": {
-    "@types/vscode": "^1.51.0",
+    "@babel/core": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-react": "^7.14.5",
+    "@luozhu/vscode-utils": "^0.6.1",
+    "@rollup/plugin-commonjs": "^19.0.1",
+    "@rollup/plugin-node-resolve": "^13.0.2",
+    "@rollup/plugin-typescript": "^8.2.3",
+    "@tsconfig/svelte": "^2.0.1",
     "@types/glob": "^7.1.3",
-    "@types/mocha": "^8.0.0",
-    "@types/node": "^12.11.7",
-    "eslint": "^7.9.0",
-    "@typescript-eslint/eslint-plugin": "^4.1.1",
-    "@typescript-eslint/parser": "^4.1.1",
-    "glob": "^7.1.6",
-    "mocha": "^8.1.3",
-    "typescript": "^4.0.2",
-    "vscode-test": "^1.4.0",
-    "ts-loader": "^8.0.3",
-    "webpack": "^4.44.1",
-    "webpack-cli": "^3.3.12"
+    "@types/mocha": "^8.2.2",
+    "@types/node": "14.x",
+    "@types/vscode": "^1.59.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "@vue/cli": "^4.5.13",
+    "eslint": "^7.27.0",
+    "glob": "^7.1.7",
+    "mocha": "^8.4.0",
+    "ts-loader": "^9.2.2",
+    "typescript": "^4.3.2",
+    "vscode-test": "^1.5.2",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "axios": "^0.21.1"
   }
 }

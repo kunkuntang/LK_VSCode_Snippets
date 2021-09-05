@@ -1,0 +1,8 @@
+body {
+  padding: 20px;
+  background-color: #fff;
+}
+
+.ant-form-item-label > label {
+  color: #fff !important;
+}

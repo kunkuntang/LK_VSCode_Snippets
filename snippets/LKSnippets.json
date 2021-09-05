@@ -4,7 +4,7 @@
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
       "  return get('${2:url}', params, {",
-      "     baseURL: SystemStore.tenantUrl,",
+      "     baseURL: process.env,",
       "   }).then((res) => {",
       "      return new ${3:ContainerEntity}(res.data);",
       "  });",
@@ -17,7 +17,7 @@
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
       "  return post('${3:url}', params, {",
-      "     baseURL: SystemStore.tenantUrl,",
+      "     baseURL: process.env,",
       "   }).then((res) => {",
       "      return new ${4:ContainerEntity}(res.data);",
       "  });",
@@ -30,7 +30,7 @@
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
       "  return _delete('${3:url}', params, {",
-      "     baseURL: SystemStore.tenantUrl,",
+      "     baseURL: process.env,",
        " }).then((res) => {",
       "      return new ${4:ContainerEntity}(res.data);",
       "  });",
@@ -43,7 +43,7 @@
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
       "  return put('${3:url}', params, {",
-      "     baseURL: SystemStore.tenantUrl,",
+      "     baseURL: process.env,",
       "  }).then((res) => {",
       "      return new ${4:ContainerEntity}(res.data);",
       "  });",
@@ -56,7 +56,7 @@
     "body": [
       "export function ${1:InterfaceName}Service(params: ${1}ParamsModel) {",
       "  return patch('${3:url}', params, {",
-      "     baseURL: SystemStore.tenantUrl",
+      "     baseURL: process.env",
       "  }).then((res) => {",
       "      return new ${4:ContainerEntity}(res.data);",
       "  });",
