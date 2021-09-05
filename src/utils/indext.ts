@@ -5,6 +5,7 @@ import * as vscode from "vscode";
 import {
   getProjectInfoByNameService,
   ICreateFeatureModel,
+  IFinishFeature,
 } from "./request-gitlab-api";
 
 async function getCurrentWorkspace() {
@@ -79,7 +80,7 @@ async function checkWrokspaceIsClean(currentWorkSpace: vscode.WorkspaceFolder) {
     } else {
       return false;
     }
-  } catch (error) {
+  } catch (error: any) {
     vscode.window.showErrorMessage(error.message);
     return false;
   }
@@ -94,19 +95,54 @@ export async function createLocalFeatureGitBranch(params: ICreateFeatureModel) {
       // 1. 检查当前工作空间是否干净
       const isClean = await checkWrokspaceIsClean(currentWorkSpace);
       if (!isClean) {
-        throw new Error("当前工作空间存在未处理的文件，请处理并提交后再尝试操作");
+        throw new Error(
+          "当前工作空间存在未处理的文件，请处理并提交后再尝试操作"
+        );
       }
       // 2. 本地从 master 分支中创建一个 Feature 分支
       // 3. 切换到新创建的分支
       // 4. 把新创建的分支推送到远程仓库
       exec(
-        `git branch ${newBranchName} && git checkout ${newBranchName} && git push --set-upstream origin ${newBranchName}`,
+        `git checkout master && git branch ${newBranchName} && git checkout ${newBranchName} && git push --set-upstream origin ${newBranchName}`,
         {
           cwd: currentWorkSpace.uri.fsPath,
         }
       );
       return true;
-    } catch (error) {
+    } catch (error: any) {
+      vscode.window.showErrorMessage(error.message || "创建新分支失败");
+      return false;
+    }
+  } else {
+    vscode.window.showErrorMessage("当前没打开工作空间");
+    return false;
+  }
+}
+
+export async function deleteLocalFeatureGitBranch(params: {
+  source_branch: string;
+}) {
+  let currentWorkSpace: vscode.WorkspaceFolder | null =
+    await getCurrentWorkspace();
+  if (currentWorkSpace) {
+    try {
+      // 1. 检查当前工作空间是否干净
+      const isClean = await checkWrokspaceIsClean(currentWorkSpace);
+      if (!isClean) {
+        throw new Error(
+          "当前工作空间存在未处理的文件，请处理并提交后再尝试操作"
+        );
+      }
+      // 2. 切换到 master 分支
+      // 3. 删除功能分支
+      exec(
+        `git checkout master && git branch -D ${params.source_branch}`,
+        {
+          cwd: currentWorkSpace.uri.fsPath,
+        }
+      );
+      return true;
+    } catch (error: any) {
       vscode.window.showErrorMessage(error.message || "创建新分支失败");
       return false;
     }

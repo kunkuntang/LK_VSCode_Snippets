@@ -8,6 +8,8 @@ export default defineConfig({
     { path: '/', component: '@/pages/index' },
     { path: '/feature/add', component: '@/pages/task/createFeature' },
     { path: '/fixed/add', component: '@/pages/task/createFixed' },
+    { path: '/feature/finish', component: '@/pages/task/finishFeature' },
+    { path: '/fixed/finish', component: '@/pages/task/finishFixed' },
   ],
   fastRefresh: {},
   history: {
