@@ -2201,10 +2201,10 @@
   dependencies:
     "@types/node" "*"
 
-"@types/vscode@^1.59.0":
-  version "1.59.0"
-  resolved "https://registry.nlark.com/@types/vscode/download/@types/vscode-1.59.0.tgz?cache=0&sync_timestamp=1629710740091&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fvscode%2Fdownload%2F%40types%2Fvscode-1.59.0.tgz#11c93f5016926126bf30b47b9ece3bd617eeef31"
-  integrity sha1-Eck/UBaSYSa/MLR7ns471hfu7zE=
+"@types/vscode@1.51.0":
+  version "1.51.0"
+  resolved "https://npm.liankaa.com/@types%2fvscode/-/vscode-1.51.0.tgz#f2e324d8385db95030b1454fd1f043618e08097d"
+  integrity sha1-8uMk2DhduVAwsUVP0fBDYY4ICX0=
 
 "@types/ws@^7.0.0":
   version "7.4.7"
