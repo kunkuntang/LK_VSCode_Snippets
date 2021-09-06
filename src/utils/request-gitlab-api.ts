@@ -207,6 +207,31 @@ export function finishProjectFeature(params: IFinishFeature) {
     });
 }
 
+interface IGetFixBranchesList {
+  project_id: number;
+  username: string;
+}
+
+export function getFixBranchesList(params: IGetFixBranchesList) {
+  return request
+    .get(
+      `/projects/${params.project_id}/repository/branches?search=${params.username}`,
+      {
+        headers: {
+          "PRIVATE-TOKEN": gitlabAccessToken,
+        },
+      }
+    )
+    .then((res) => {
+      if (res.status === 200 && res.data) {
+        return res.data;
+      } else {
+        handleNetworkError(res, "获取修复列表 ");
+        return false;
+      }
+    });
+}
+
 function getProjectId() {}
 
 export const getProjectIssue = function () {

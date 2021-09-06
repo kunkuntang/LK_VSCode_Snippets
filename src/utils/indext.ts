@@ -80,7 +80,7 @@ async function checkWrokspaceIsClean(currentWorkSpace: vscode.WorkspaceFolder) {
     } else {
       return false;
     }
-  } catch (error) {
+  } catch (error: any) {
     vscode.window.showErrorMessage(error.message);
     return false;
   }
@@ -109,7 +109,7 @@ export async function createLocalFeatureGitBranch(params: ICreateFeatureModel) {
         }
       );
       return true;
-    } catch (error) {
+    } catch (error: any) {
       vscode.window.showErrorMessage(error.message || "创建新分支失败");
       return false;
     }
@@ -142,7 +142,7 @@ export async function deleteLocalFeatureGitBranch(params: {
         }
       );
       return true;
-    } catch (error) {
+    } catch (error: any) {
       vscode.window.showErrorMessage(error.message || "创建新分支失败");
       return false;
     }

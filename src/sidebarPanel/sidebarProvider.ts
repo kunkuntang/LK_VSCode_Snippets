@@ -10,6 +10,7 @@ import {
   finishProjectFeature,
   getCurrentMileStonesService,
   getCurrentUserInfoService,
+  getFixBranchesList,
   getProjectMergeRequestByUser,
 } from "../utils/request-gitlab-api";
 import { getNonce } from "./getNonce";
@@ -37,11 +38,27 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
       switch (data.command) {
         case "getAccessToken": {
           const config = vscode.workspace.getConfiguration("lk-vscode-gitlab");
-          const gitlabAccessToken = config.get("gitlabAccessToken");
-          webviewView.webview.postMessage({
-            command: data.command,
-            value: gitlabAccessToken,
-          });
+          let gitlabAccessToken = config.get("gitlabAccessToken");
+          try {
+            // 如果成功调用获取用户信息接口，则代表 accessToken 合法
+            const userInfo = await getCurrentUserInfoService(data.value);
+            if (data.value) {
+              const config =
+                vscode.workspace.getConfiguration("lk-vscode-gitlab");
+              config.update("gitlabAccessToken", data.value, true);
+              gitlabAccessToken = data.value;
+            }
+            webviewView.webview.postMessage({
+              command: data.command,
+              value: gitlabAccessToken,
+            });
+          } catch (error) {
+            vscode.window.showErrorMessage("请输入正确的 accessToken !");
+            webviewView.webview.postMessage({
+              command: data.command,
+              value: "",
+            });
+          }
           break;
         }
         case "getUserInfo": {
@@ -49,15 +66,6 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             // 如果有传 accessToken ，则代表登录，用传入的 accessToken 先验证合法性
             const userInfo = await getCurrentUserInfoService(data.value);
             console.log("user info", userInfo);
-            if (data.value) {
-              const config =
-                vscode.workspace.getConfiguration("lk-vscode-gitlab");
-              config.update("gitlabAccessToken", data.value, true);
-              webviewView.webview.postMessage({
-                command: "getAccessToken",
-                value: data.value,
-              });
-            }
             webviewView.webview.postMessage({
               command: data.command,
               value: userInfo,
@@ -67,6 +75,10 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             webviewView.webview.postMessage({
               command: data.command,
               value: null,
+            });
+            webviewView.webview.postMessage({
+              command: "getAccessToken",
+              value: "",
             });
           }
           break;
@@ -158,7 +170,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                 throw Error("无法删除本地分支，请手动操作");
               }
             }
-          } catch (error) {
+          } catch (error: any) {
             vscode.window.showErrorMessage(error.message);
           } finally {
             webviewView.webview.postMessage({
@@ -166,6 +178,14 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
               value: finishFlag,
             });
           }
+          break;
+        }
+        case "getFixBranchesList": {
+          const result = await getFixBranchesList(data.value);
+          webviewView.webview.postMessage({
+            command: data.command,
+            value: result,
+          });
           break;
         }
         case "onInfo": {
