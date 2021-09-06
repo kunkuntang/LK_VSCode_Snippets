@@ -120,7 +120,7 @@ option {
 }
 
 .ant-form-item-label > label {
-  color: #fff !important;
+  color: var(--vscode-input-foreground) !important;
 }
 
 .ant-form-item-has-error
