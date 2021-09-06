@@ -15,7 +15,7 @@ export default function Login(props: IProps) {
     if (userAccessToken) {
       setAccessToken(userAccessToken);
     } else {
-      vscode.postMessage({
+      tsvscode.postMessage({
         command: 'onError',
         value: '请输入 access_token ',
       });

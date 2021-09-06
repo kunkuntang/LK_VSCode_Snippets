@@ -100,9 +100,9 @@ export default function CreateFeature() {
 
       <Avatar userInfo={userInfo}></Avatar>
 
-      <div style={{ color: '#fff' }}>
-        <h2 style={{ color: '#fff' }}>当前项目</h2>
-        <h3 style={{ color: '#fff' }}>
+      <div className={styles.text}>
+        <h2 className={styles.text}>当前项目</h2>
+        <h3 className={styles.text}>
           {window.projectInfo && (
             <a href={window.projectInfo.gitlabProjectInfo.web_url || ''}>
               {window.projectInfo.workspace?.name ||
@@ -113,8 +113,8 @@ export default function CreateFeature() {
         </h3>
       </div>
 
-      <div style={{ color: '#fff' }}>
-        <h2 style={{ color: '#fff' }}>创建新功能</h2>
+      <div className={styles.text}>
+        <h2 className={styles.text}>创建新功能</h2>
         <ul>
           <li>在本地和远端创建同名的 feature 分支</li>
           <li>
@@ -163,7 +163,7 @@ export default function CreateFeature() {
           label="关联tapd信息"
           rules={[{ required: true, message: '关联tapd信息必填' }]}
         >
-          <Input />
+          <Input.TextArea className={styles['form-text-area']} />
         </Form.Item>
         <Form.Item style={{ marginTop: '15px' }}>
           <button className={styles['form-button']} type="submit">
