@@ -86,6 +86,52 @@ async function checkWrokspaceIsClean(currentWorkSpace: vscode.WorkspaceFolder) {
   }
 }
 
+async function checkBranchIsExist(
+  branchName: string,
+  currentWorkSpace: vscode.WorkspaceFolder
+) {
+  try {
+    const gitStatusBuffer = execSync(`git branch ${branchName}`, {
+      cwd: currentWorkSpace.uri.fsPath,
+    });
+    const gitStatusStr = gitStatusBuffer.toString("utf-8");
+    const cleanKeyWord = "already exists";
+    if (!gitStatusStr.includes(cleanKeyWord)) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error: any) {
+    vscode.window.showErrorMessage(error.message);
+    return false;
+  }
+}
+
+async function askForDeleteExistBranch(
+  newBranchName: string,
+  currentWorkSpace: vscode.WorkspaceFolder
+) {
+  let isCover = await vscode.window
+    .showInformationMessage(
+      `当前工作空间已经存在 ${newBranchName} 分支，是否覆盖该分支？`,
+      "确定",
+      "取消"
+    )
+    .then((res) => {
+      return res === "确定";
+    });
+  if (!isCover) {
+    vscode.window.showInformationMessage(`请手动删除 ${newBranchName} 分支`);
+    return false;
+  } else {
+    // 删除已经存在的分支
+    execSync(`git branch -D ${newBranchName}`, {
+      cwd: currentWorkSpace.uri.fsPath,
+    });
+    return true;
+  }
+}
+
 export async function createLocalFeatureGitBranch(params: ICreateFeatureModel) {
   let currentWorkSpace: vscode.WorkspaceFolder | null =
     await getCurrentWorkspace();
@@ -99,9 +145,21 @@ export async function createLocalFeatureGitBranch(params: ICreateFeatureModel) {
           "当前工作空间存在未处理的文件，请处理并提交后再尝试操作"
         );
       }
-      // 2. 本地从 master 分支中创建一个 Feature 分支
-      // 3. 切换到新创建的分支
-      // 4. 把新创建的分支推送到远程仓库
+      // 2. 检查本地是否已经存在改 feature 分支
+      const isExist = await checkBranchIsExist(newBranchName, currentWorkSpace);
+      if (!isExist) {
+        const isAllowDelete = await askForDeleteExistBranch(
+          newBranchName,
+          currentWorkSpace
+        );
+        if (!isAllowDelete) {
+          // 用户选择先手动处理已经存在的分支
+          return false;
+        }
+      }
+      // 3. 本地从 master 分支中创建一个 Feature 分支
+      // 4. 切换到新创建的分支
+      // 5. 把新创建的分支推送到远程仓库
       exec(
         `git checkout master && git branch ${newBranchName} && git checkout ${newBranchName} && git push --set-upstream origin ${newBranchName}`,
         {
@@ -135,12 +193,100 @@ export async function deleteLocalFeatureGitBranch(params: {
       }
       // 2. 切换到 master 分支
       // 3. 删除功能分支
-      exec(
-        `git checkout master && git branch -D ${params.source_branch}`,
-        {
-          cwd: currentWorkSpace.uri.fsPath,
+      exec(`git checkout master && git branch -D ${params.source_branch}`, {
+        cwd: currentWorkSpace.uri.fsPath,
+      });
+      return true;
+    } catch (error: any) {
+      vscode.window.showErrorMessage(error.message || "删除分支失败");
+      return false;
+    }
+  } else {
+    vscode.window.showErrorMessage("当前没打开工作空间");
+    return false;
+  }
+}
+
+export interface ICreateFixedModel {
+  project_id: number;
+  milestone_id: number;
+  fixedBranch: string;
+  name: string;
+  tapd: string;
+}
+
+export async function createFixedBranch(params: ICreateFixedModel) {
+  let currentWorkSpace: vscode.WorkspaceFolder | null =
+    await getCurrentWorkspace();
+  if (currentWorkSpace) {
+    try {
+      // 1. 检查当前工作空间是否干净
+      const isClean = await checkWrokspaceIsClean(currentWorkSpace);
+      if (!isClean) {
+        throw new Error(
+          "当前工作空间存在未处理的文件，请处理并提交后再尝试操作"
+        );
+      }
+
+      if (params.fixedBranch === "master") {
+        const newBranchName = `hotfix/${params.name}`;
+        // 如果当前的修复是在 master 分支上
+        // 2. 检查本地是否已经存在该 hotfix 分支
+        const isExist = await checkBranchIsExist(
+          newBranchName,
+          currentWorkSpace
+        );
+        if (!isExist) {
+          const isAllowDelete = await askForDeleteExistBranch(
+            newBranchName,
+            currentWorkSpace
+          );
+          if (!isAllowDelete) {
+            // 用户选择先手动处理已经存在的分支
+            return false;
+          }
         }
-      );
+        // 3. 切换到 master 分支上并且从远端更新分支信息
+        // 4. 本地从 master 分支中创建一个 hotfix 分支
+        // 5. 切换到新创建的分支
+        // 6. 把新创建的分支推送到远程仓库
+        exec(
+          `git checkout master && git pull origin ${params.fixedBranch} && git branch ${newBranchName} && git checkout ${newBranchName} && git push --set-upstream origin ${newBranchName}`,
+          {
+            cwd: currentWorkSpace.uri.fsPath,
+          }
+        );
+      } else {
+        const newBranchName = `hotfix/${
+          params.name
+        }(${params.fixedBranch.replace("feature/", "")})`;
+
+        // 如果当前的修复是在 feature 分支上
+        // 2. 检查本地是否已经存在改 feature 分支
+        const isExist = await checkBranchIsExist(
+          newBranchName,
+          currentWorkSpace
+        );
+        if (!isExist) {
+          const isAllowDelete = await askForDeleteExistBranch(
+            newBranchName,
+            currentWorkSpace
+          );
+          if (!isAllowDelete) {
+            // 用户选择先手动处理已经存在的分支
+            return false;
+          }
+        }
+        // 3. 切换到 feature 分支上并且从远端更新分支信息
+        // 4. 从修复的 feature 分支上新建一个 hotfix 分支
+        // 5. 切换到新创建的分支
+        exec(
+          `git checkout ${params.fixedBranch} && git pull origin ${params.fixedBranch} && git branch ${newBranchName} && git checkout ${newBranchName}`,
+          {
+            cwd: currentWorkSpace.uri.fsPath,
+          }
+        );
+      }
       return true;
     } catch (error: any) {
       vscode.window.showErrorMessage(error.message || "创建新分支失败");

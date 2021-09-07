@@ -85,13 +85,13 @@ export default function CreateFixed() {
 
   const [form] = Form.useForm();
 
-  function handleCreateFixed() {
-    const formData = form.getFieldsValue();
-    const params: ICreateFixedModel = {
-      project_id: window.projectInfo.gitlabProjectInfo.id,
-      ...formData,
-    };
-    // TODO
+  function handleCreateFixed(event: MessageEvent<PostMessageParams>) {
+    const data = event.data;
+    if (data.command === 'createFixed') {
+      if (data.value) {
+        history.goBack();
+      }
+    }
   }
 
   const onFinish = (values: ICreateFixedFormData) => {
@@ -168,7 +168,7 @@ export default function CreateFixed() {
         </Form.Item>
         <Form.Item
           className={styles['form-item']}
-          name="milestone_id"
+          name="fixedBranch"
           label="修复分支"
           rules={[{ required: true, message: '修复分支必填' }]}
         >

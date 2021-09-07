@@ -117,20 +117,24 @@ export function createIssueService(params: ICreateFeatureModel) {
     });
 }
 
-export function createMergeRequestService(
-  params: ICreateFeatureModel & { issueId: number }
+function createMergeRequestService(
+  params: ICreateFeatureModel & { issueId: number },
+  target_branch: string,
+  newBranchName: string
 ) {
-  const newBranchName = `feature/${params.name}`;
+  let mergeRequestTitle =
+    newBranchName.slice(0, 1).toUpperCase() + newBranchName.slice(1);
+
   return request
     .post(
       `/projects/${params.project_id}/merge_requests`,
       {
         id: params.project_id,
         source_branch: newBranchName,
-        target_branch: "beta",
-        title: "Draft: " + params.name,
+        target_branch: target_branch,
+        title: "Draft: " + mergeRequestTitle,
         assignee_id: 10,
-        description: [params.tapd, `Closed #${params.issueId}`].join("\n"),
+        description: [params.tapd, `Closed #${params.issueId}`].join("\n\n"),
         milestone_id: params.milestone_id,
         squash: true,
         remove_source_branch: false,
@@ -150,6 +154,20 @@ export function createMergeRequestService(
         return false;
       }
     });
+}
+
+export function createFeatureMergeRequestService(
+  params: Parameters<typeof createMergeRequestService>[0]
+) {
+  const newBranchName = `feature/${params.name}`;
+  return createMergeRequestService(params, "beta", newBranchName);
+}
+
+export function createFixedMergeRequestService(
+  params: Parameters<typeof createMergeRequestService>[0]
+) {
+  const newBranchName = `hotfix/${params.name}`;
+  return createMergeRequestService(params, "master", newBranchName);
 }
 
 interface IGetProjectMRByUser {
