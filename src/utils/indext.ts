@@ -96,14 +96,14 @@ async function checkBranchIsExist(
     });
     const gitStatusStr = gitStatusBuffer.toString("utf-8");
     const cleanKeyWord = "already exists";
-    if (!gitStatusStr.includes(cleanKeyWord)) {
+    if (gitStatusStr.includes(cleanKeyWord)) {
       return true;
     } else {
       return false;
     }
   } catch (error: any) {
     vscode.window.showErrorMessage(error.message);
-    return false;
+    return true;
   }
 }
 
@@ -125,7 +125,7 @@ async function askForDeleteExistBranch(
     return false;
   } else {
     // 删除已经存在的分支
-    execSync(`git branch -D ${newBranchName}`, {
+    execSync(`git checkout master && git branch -D ${newBranchName}`, {
       cwd: currentWorkSpace.uri.fsPath,
     });
     return true;
@@ -147,7 +147,7 @@ export async function createLocalFeatureGitBranch(params: ICreateFeatureModel) {
       }
       // 2. 检查本地是否已经存在改 feature 分支
       const isExist = await checkBranchIsExist(newBranchName, currentWorkSpace);
-      if (!isExist) {
+      if (isExist) {
         const isAllowDelete = await askForDeleteExistBranch(
           newBranchName,
           currentWorkSpace
@@ -228,6 +228,11 @@ export async function createFixedBranch(params: ICreateFixedModel) {
         );
       }
 
+      console.log(
+        "params.fixedBranch",
+        params.fixedBranch,
+        params.fixedBranch === "master"
+      );
       if (params.fixedBranch === "master") {
         const newBranchName = `hotfix/${params.name}`;
         // 如果当前的修复是在 master 分支上
@@ -236,7 +241,7 @@ export async function createFixedBranch(params: ICreateFixedModel) {
           newBranchName,
           currentWorkSpace
         );
-        if (!isExist) {
+        if (isExist) {
           const isAllowDelete = await askForDeleteExistBranch(
             newBranchName,
             currentWorkSpace
@@ -250,6 +255,10 @@ export async function createFixedBranch(params: ICreateFixedModel) {
         // 4. 本地从 master 分支中创建一个 hotfix 分支
         // 5. 切换到新创建的分支
         // 6. 把新创建的分支推送到远程仓库
+        console.log(
+          `git command: git checkout ${params.fixedBranch} && git pull origin ${params.fixedBranch} && git branch ${newBranchName} && git checkout ${newBranchName}`
+        );
+
         exec(
           `git checkout master && git pull origin ${params.fixedBranch} && git branch ${newBranchName} && git checkout ${newBranchName} && git push --set-upstream origin ${newBranchName}`,
           {
@@ -267,7 +276,7 @@ export async function createFixedBranch(params: ICreateFixedModel) {
           newBranchName,
           currentWorkSpace
         );
-        if (!isExist) {
+        if (isExist) {
           const isAllowDelete = await askForDeleteExistBranch(
             newBranchName,
             currentWorkSpace
@@ -295,5 +304,27 @@ export async function createFixedBranch(params: ICreateFixedModel) {
   } else {
     vscode.window.showErrorMessage("当前没打开工作空间");
     return false;
+  }
+}
+
+export async function getFixedBranches() {
+  let currentWorkSpace: vscode.WorkspaceFolder | null =
+    await getCurrentWorkspace();
+
+  if (currentWorkSpace) {
+    const gitFixedBranchesBuffer = execSync("git branch -a", {
+      cwd: currentWorkSpace.uri.fsPath,
+    });
+
+    const tempArr = gitFixedBranchesBuffer
+      .toString("utf-8")
+      .split("\n")
+      .map((item) => item.trim().replace(/^\* |remotes\/origin\//g, ""))
+      .filter((item) => item);
+    const fixedBranchesSet = Array.from(new Set(tempArr)).filter((item) =>
+      /(H|h)otfix/.test(item)
+    );
+    console.log("tempArr", tempArr);
+    console.log("gitFixedBranchesBuffer", fixedBranchesSet);
   }
 }

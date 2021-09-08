@@ -42,7 +42,7 @@ function getCurrentMergeRequestHooks() {
     if (data.command === 'getCurrentMergeRequest') {
       if (data.value) {
         console.log('data.value', data.value);
-        setMergeRequestList(data.value);
+        setMergeRequestList(data.value.filter((item: { title: string }) => item.title.includes('Feature')));
       } else {
         setMergeRequestList([]);
       }
@@ -157,6 +157,7 @@ export default function FinishFeature() {
           label="是否删除本地分支"
           initialValue={true}
           style={{ maxWidth: 'unset' }}
+          valuePropName="checked"
         >
           <Switch></Switch>
         </Form.Item>

@@ -6,6 +6,7 @@ import { showInputBox } from "./baseInput";
 import { LkDevOpsManager } from "./devOpsPanel/devOpsManager";
 import { DevOpsPanel } from "./devOpsPanel/devOpsPanel";
 import { SidebarProvider } from "./sidebarPanel/sidebarProvider";
+import { getFixedBranches } from "./utils/indext";
 
 const lkDevOpsManager = new LkDevOpsManager();
 
@@ -105,6 +106,8 @@ export function activate(context: vscode.ExtensionContext) {
       }, 500);
     })
   );
+
+  getFixedBranches()
 
   context.subscriptions.push(disposable);
   context.subscriptions.push(createTask);

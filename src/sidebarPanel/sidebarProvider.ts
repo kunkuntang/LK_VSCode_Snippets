@@ -8,7 +8,7 @@ import {
 } from "../utils/indext";
 import {
   createFixedMergeRequestService,
-  createIssueService as createIssueService,
+  createIssueService,
   createFeatureMergeRequestService,
   finishProjectFeature,
   getCurrentMileStonesService,
@@ -115,7 +115,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             // 2. gitlab 创建一个 Issue，并且关联当前的迭代
             const createIssueResult = await createIssueService({
               ...data.value,
-              name: "Feature/" + data.value,
+              name: "Feature/" + data.value.name,
             });
             if (!createIssueResult) {
               throw new Error("创建新 Issue 失败");
