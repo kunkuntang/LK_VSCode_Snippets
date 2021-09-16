@@ -87,6 +87,14 @@
       {
         "language": "typescript",
         "path": "./snippets/LKSnippets.json"
+      },
+      {
+        "language": "typescriptreact",
+        "path": "./snippets/LKAntDSnippets.json"
+      },
+      {
+        "language": "typescriptreact",
+        "path": "./snippets/LKConfigSnippets.json"
       }
     ],
     "configuration": [
