@@ -89,11 +89,11 @@
       },
       {
         "language": "typescriptreact",
-        "path": "./snippets/HKSnippets.json"
+        "path": "./snippets/LKSnippets.json"
       },
       {
         "language": "typescript",
-        "path": "./snippets/HKSnippets.json"
+        "path": "./snippets/LKSnippets.json"
       },
       {
         "language": "typescriptreact",
