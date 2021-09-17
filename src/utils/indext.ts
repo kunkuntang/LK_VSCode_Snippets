@@ -3,7 +3,10 @@ import { fstat, readFileSync } from "fs";
 import path = require("path");
 import * as vscode from "vscode";
 import {
+  finishProjectFeature,
+  getFixBranchesList,
   getProjectInfoByNameService,
+  getProjectMergeRequestByUser,
   ICreateFeatureModel,
   IFinishFeature,
 } from "./request-gitlab-api";
@@ -307,7 +310,9 @@ export async function createFixedBranch(params: ICreateFixedModel) {
   }
 }
 
-export async function getFixedBranches() {
+export async function getFixedBranches(
+  params: Parameters<typeof getProjectMergeRequestByUser>[0]
+) {
   let currentWorkSpace: vscode.WorkspaceFolder | null =
     await getCurrentWorkspace();
 
@@ -316,6 +321,7 @@ export async function getFixedBranches() {
       cwd: currentWorkSpace.uri.fsPath,
     });
 
+    // 获取本地 hotfix 分支
     const tempArr = gitFixedBranchesBuffer
       .toString("utf-8")
       .split("\n")
@@ -324,7 +330,51 @@ export async function getFixedBranches() {
     const fixedBranchesSet = Array.from(new Set(tempArr)).filter((item) =>
       /(H|h)otfix/.test(item)
     );
-    console.log("tempArr", tempArr);
-    console.log("gitFixedBranchesBuffer", fixedBranchesSet);
+
+    // 获取线上自己的 hotfix merge request 分支
+    const ownBranches: any[] = await getProjectMergeRequestByUser(params);
+    const ownFixedBranches = ownBranches
+      .filter((item) => /(H|h)otfix/.test(item.title))
+      .map((item) => ({
+        ...item,
+        title: (item.title.replace(/^Draft: /g, "") as string).toLowerCase(),
+      }));
+    let tempList = fixedBranchesSet.map((item) => ({ title: item, iid: null }));
+
+    tempList.forEach((ownBranch) => {
+      if (ownFixedBranches.every((item) => item.title !== ownBranch.title)) {
+        ownFixedBranches.push(ownBranch);
+      }
+    });
+
+    return ownFixedBranches;
+  } else {
+    return [];
+  }
+}
+
+interface IFinishFixed {
+  merge_request_id: number;
+  merge_request_title: string;
+  project_id: number;
+  source_branch: string;
+  is_delete_local_branch: boolean;
+}
+
+export async function finishedFixedBranch(params: IFinishFixed) {
+  try {
+    if (params.merge_request_id) {
+      // 如果修复的是否是 master 分支，则去除 gitlab 上的 merge_request 的草稿状态
+      const finishResult = await finishProjectFeature(params);
+    } else {
+      // 如果修复的是 feature 分支，则在本地把修复分支合并到功能分支
+      const targeBranch =
+      // execSync(`git`)
+      // 并且检查 gitlab 上是否有对应的修复分支，如果有则删除远程分支
+    }
+    return true;
+  } catch (error) {
+    console.error("finishedFixedBranch err", error);
+    return false;
   }
 }

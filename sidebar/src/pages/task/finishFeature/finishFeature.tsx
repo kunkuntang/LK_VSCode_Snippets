@@ -136,7 +136,7 @@ export default function FinishFeature() {
       >
         <Form.Item
           className={styles['form-item']}
-          name="merge_request_id"
+          name="c"
           label="完成的功能"
           rules={[{ required: true, message: '完成的功能必填' }]}
           valuePropName="checked"

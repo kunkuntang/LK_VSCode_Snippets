@@ -3,7 +3,9 @@ import {
   createFixedBranch,
   createLocalFeatureGitBranch,
   deleteLocalFeatureGitBranch,
+  finishedFixedBranch,
   getCurrentProjectInfo,
+  getFixedBranches,
   ICreateFixedModel,
 } from "../utils/indext";
 import {
@@ -188,6 +190,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           break;
         }
         case "getFixBranchesList": {
+          // 修复只能是自己创建的分支
           const result = await getFixBranchesList(data.value);
           webviewView.webview.postMessage({
             command: data.command,
@@ -203,6 +206,55 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             if (!result) {
               throw new Error("分支创建失败");
             }
+            // 2. 如果修复的是 master 分支
+            if (data.value.fixedBranch === "master") {
+              const createIssueResult = await createIssueService({
+                ...data.value,
+                name: "Hotfix/" + data.value.name,
+              } as ICreateFixedModel);
+              if (!createIssueResult) {
+                throw new Error("创建新 Issue 失败");
+              }
+              // 3. gitlab 创建一个 MR，并且关联刚创建的 Issue
+              const createMergeRequestResult =
+                await createFixedMergeRequestService({
+                  ...data.value,
+                  issueId: createIssueResult.iid,
+                });
+              if (!createMergeRequestResult) {
+                throw new Error("创建新 Merge_Request 失败");
+              }
+            }
+          } catch (error) {
+            console.log("createFixed error: ", error);
+            result = false;
+          } finally {
+            webviewView.webview.postMessage({
+              command: data.command,
+              value: result,
+            });
+          }
+          break;
+        }
+        case "getCurrentHotfixedBranch": {
+          const result = await getFixedBranches(data.value);
+          webviewView.webview.postMessage({
+            command: data.command,
+            value: result,
+          });
+          break;
+        }
+        case "finishFixed": {
+          let result = true;
+          console.log("finishFixed", data);
+          try {
+            result = await finishedFixedBranch(data.value);
+            if (!result) {
+              throw new Error("分支创建失败");
+            }
+
+
+            
             // 2. 如果修复的是 master 分支
             if (data.value.fixedBranch === "master") {
               const createIssueResult = await createIssueService({

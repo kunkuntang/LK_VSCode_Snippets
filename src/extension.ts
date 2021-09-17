@@ -90,9 +90,6 @@ export function activate(context: vscode.ExtensionContext) {
     new SidebarProvider(context.extensionUri)
   );
 
-  console.log("workspace", vscode.workspace.workspaceFolders);
-  console.log("env", vscode.env);
-
   context.subscriptions.push(
     vscode.commands.registerCommand("LkGitlabTools.refresh", async () => {
       await vscode.commands.executeCommand("workbench.action.closeSidebar");
@@ -106,8 +103,6 @@ export function activate(context: vscode.ExtensionContext) {
       }, 500);
     })
   );
-
-  getFixedBranches()
 
   context.subscriptions.push(disposable);
   context.subscriptions.push(createTask);

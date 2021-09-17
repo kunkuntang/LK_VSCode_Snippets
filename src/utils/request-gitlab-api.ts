@@ -160,7 +160,7 @@ export function createFeatureMergeRequestService(
   params: Parameters<typeof createMergeRequestService>[0]
 ) {
   const newBranchName = `feature/${params.name}`;
-  return createMergeRequestService(params, "beta", newBranchName);
+  return createMergeRequestService(params, "stage", newBranchName);
 }
 
 export function createFixedMergeRequestService(
@@ -230,6 +230,7 @@ interface IGetFixBranchesList {
   username: string;
 }
 
+/** 获取自己创建的分支 */
 export function getFixBranchesList(params: IGetFixBranchesList) {
   return request
     .get(

@@ -6,7 +6,7 @@ import { history } from '@/.umi/core/history';
 const { Option } = Select;
 
 interface IFinishFixedFormData {
-  merge_request_id: number;
+  merge_request_title: string;
   is_delete_local_branch: boolean;
 }
 
@@ -15,8 +15,8 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-function getCurrentMergeRequestHooks() {
-  const [mergeRequestList, setMergeRequestList] = useState<
+function getCurrentHotfixedHooks() {
+  const [hotfixedList, setHotfixedList] = useState<
     {
       iid: number;
       title: string;
@@ -24,12 +24,9 @@ function getCurrentMergeRequestHooks() {
     }[]
   >([]);
 
-  function _getMergeRequestList(params: {
-    project_id: number;
-    author_id: number;
-  }) {
+  function _getHotfixedList(params: { project_id: number; author_id: number }) {
     tsvscode.postMessage({
-      command: 'getCurrentMergeRequest',
+      command: 'getCurrentHotfixedBranch',
       value: {
         project_id: params.project_id,
         author_id: params.author_id,
@@ -37,43 +34,39 @@ function getCurrentMergeRequestHooks() {
     });
   }
 
-  function _setMergeRequestList(event: MessageEvent<PostMessageParams>) {
+  function _setHotfixedList(event: MessageEvent<PostMessageParams>) {
     const data = event.data;
-    if (data.command === 'getCurrentMergeRequest') {
+    if (data.command === 'getCurrentHotfixedBranch') {
       if (data.value) {
         console.log('data.value', data.value);
-        setMergeRequestList(
-          data.value.filter((item: { title: string }) =>
-            item.title.includes('Hotfix'),
-          ),
-        );
+        setHotfixedList(data.value);
       } else {
-        setMergeRequestList([]);
+        setHotfixedList([]);
       }
     }
   }
 
   return {
-    mergeRequestList,
-    getMergeRequestList: _getMergeRequestList,
-    setMergeRequestList: _setMergeRequestList,
+    hotfixedList,
+    getHotfixedList: _getHotfixedList,
+    setHotfixedList: _setHotfixedList,
   };
 }
 
 export default function finishFixed() {
   const userInfo = window.userInfo;
-  const { mergeRequestList, getMergeRequestList, setMergeRequestList } =
-    getCurrentMergeRequestHooks();
+  const { hotfixedList, getHotfixedList, setHotfixedList } =
+    getCurrentHotfixedHooks();
 
   useEffect(() => {
-    getMergeRequestList({
+    getHotfixedList({
       project_id: window.projectInfo.gitlabProjectInfo.id,
       author_id: userInfo.id,
     });
-    window.addEventListener('message', setMergeRequestList);
+    window.addEventListener('message', setHotfixedList);
     window.addEventListener('message', handleFinishFixed);
     return () => {
-      window.removeEventListener('message', setMergeRequestList);
+      window.removeEventListener('message', setHotfixedList);
       window.removeEventListener('message', handleFinishFixed);
     };
   }, []);
@@ -91,17 +84,16 @@ export default function finishFixed() {
 
   const onFinish = (values: IFinishFixedFormData) => {
     console.log(values);
-    const merge_request_id = values.merge_request_id;
-    const selectMergeRequest = mergeRequestList.find((item) => {
-      return item.iid === merge_request_id;
+    const merge_request_title = values.merge_request_title;
+    const selectHotfixed = hotfixedList.find((item) => {
+      return item.title === merge_request_title;
     });
     tsvscode.postMessage({
       command: 'finishFixed',
       value: {
         ...values,
         project_id: window.projectInfo.gitlabProjectInfo.id,
-        merge_request_title: selectMergeRequest?.title,
-        source_branch: selectMergeRequest?.source_branch,
+        merge_request_id: selectHotfixed?.iid,
       },
     });
   };
@@ -140,15 +132,15 @@ export default function finishFixed() {
       >
         <Form.Item
           className={styles['form-item']}
-          name="merge_request_id"
-          label="完成的功能"
-          rules={[{ required: true, message: '完成的功能必填' }]}
+          name="merge_request_title"
+          label="完成的修复"
+          rules={[{ required: true, message: '完成的的修复必填' }]}
           valuePropName="checked"
         >
           <Select>
-            {mergeRequestList.map((item: any) => {
+            {hotfixedList.map((item: any, index: number) => {
               return (
-                <Option value={item.iid} key={item.iid}>
+                <Option value={item.title} key={index}>
                   {item.title}
                 </Option>
               );
