@@ -198,7 +198,7 @@ export function getProjectMergeRequestByUser(params: IGetProjectMRByUser) {
 export interface IFinishFeature {
   project_id: number;
   merge_request_id: number;
-  merge_request_title: string;
+  fixedBranch: string;
 }
 
 export function finishProjectFeature(params: IFinishFeature) {
@@ -207,7 +207,7 @@ export function finishProjectFeature(params: IFinishFeature) {
       `/projects/${params.project_id}/merge_requests/${params.merge_request_id}`,
       {
         id: params.project_id,
-        title: params.merge_request_title.replace("Draft: ", ""),
+        title: params.fixedBranch.replace("Draft: ", ""),
       },
       {
         headers: {
@@ -255,4 +255,89 @@ function getProjectId() {}
 
 export const getProjectIssue = function () {
   return request.get("/issues").then(commonResponsePipe);
+};
+
+interface ISearchGitLabIssue {
+  project_id: number;
+  search: string;
+}
+
+export const searchGitlabIssue = function (params: ISearchGitLabIssue) {
+  return request
+    .get(`/projects/${params.project_id}/issues?search=${params.search}`, {
+      headers: {
+        "PRIVATE-TOKEN": gitlabAccessToken,
+      },
+    })
+    .then((res) => {
+      if (res.status === 200 && res.data) {
+        return res.data;
+      } else {
+        handleNetworkError(res, "获取issue列表 ");
+        return false;
+      }
+    });
+};
+
+export const deleteGitlabIssue = function (params: {
+  project_id: number;
+  issueId: number;
+}) {
+  return request
+    .delete(`/projects/${params.project_id}/issues/${params.issueId}`, {
+      headers: {
+        "PRIVATE-TOKEN": gitlabAccessToken,
+      },
+    })
+    .then((res) => {
+      if (res.status === 204 && res.data) {
+        return res.data;
+      } else {
+        handleNetworkError(res, "删除 issue ");
+        return false;
+      }
+    });
+};
+
+export const searchGitlabMergeRequest = function (params: {
+  project_id: number;
+  search: string;
+}) {
+  return request
+    .get(
+      `/projects/${params.project_id}/merge_requests?author_id=10&state=opened&search=${params.search}`,
+      {
+        headers: {
+          "PRIVATE-TOKEN": gitlabAccessToken,
+        },
+      }
+    )
+    .then((res) => {
+      if (res.status === 200 && res.data) {
+        return res.data;
+      } else {
+        handleNetworkError(res, "获取 merge request 列表 ");
+        return false;
+      }
+    });
+};
+
+export const deleteGitlabMergeRequest = function (params: {
+  project_id: number;
+  merge_request_id: number;
+}) {
+  return request
+    .delete(`/projects/${params.project_id}/issues/${params.merge_request_id}`, {
+      headers: {
+        "PRIVATE-TOKEN": gitlabAccessToken,
+      },
+    })
+    .then((res) => {
+      if (res.status === 200 && res.data) {
+        return res.data;
+      } else {
+        handleNetworkError(res, "删除 issue ");
+        return false;
+      }
+    });
 };

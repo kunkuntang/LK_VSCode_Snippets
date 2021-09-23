@@ -95,11 +95,13 @@ export default function CreateFixed() {
   }
 
   const onFinish = (values: ICreateFixedFormData) => {
-    console.log(values);
+    console.log(`create fixed values`);
     tsvscode.postMessage({
       command: 'createFixed',
       value: {
         ...values,
+        // hotfix/[修复描述]_[姓名]_{修复分支名称}
+        name: values.name + `_${userInfo.username}_{${values.fixedBranch}}`,
         project_id: window.projectInfo.gitlabProjectInfo.id,
       },
     });

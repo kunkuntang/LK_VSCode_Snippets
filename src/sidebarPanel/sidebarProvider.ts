@@ -7,7 +7,7 @@ import {
   getCurrentProjectInfo,
   getFixedBranches,
   ICreateFixedModel,
-} from "../utils/indext";
+} from "../utils";
 import {
   createFixedMergeRequestService,
   createIssueService,
@@ -17,6 +17,10 @@ import {
   getCurrentUserInfoService,
   getFixBranchesList,
   getProjectMergeRequestByUser,
+  searchGitlabIssue,
+  deleteGitlabIssue,
+  searchGitlabMergeRequest,
+  deleteGitlabMergeRequest,
 } from "../utils/request-gitlab-api";
 import { getNonce } from "./getNonce";
 
@@ -161,7 +165,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
               data.value as {
                 project_id: number;
                 merge_request_id: number;
-                merge_request_title: string;
+                fixedBranch: string;
                 is_delete_local_branch: boolean;
                 source_branch: string;
               };
@@ -201,14 +205,37 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         case "createFixed": {
           let result = true;
           try {
-            // 1. 本地创建一个 hotfix/[修复名称] 分支
+            // 1. 本地创建一个修复分支
             result = await createFixedBranch(data.value as ICreateFixedModel);
             if (!result) {
               throw new Error("分支创建失败");
             }
+            debugger
             // 2. 如果修复的是 master 分支
             if (data.value.fixedBranch === "master") {
-              const createIssueResult = await createIssueService({
+              let createIssueResult;
+              const newBranchName = `hotfix/${data.value.name}`;
+              const searchIssueRes = await searchGitlabIssue({
+                project_id: data.value.project_id,
+                search: encodeURIComponent(newBranchName),
+              });
+              if (searchIssueRes.length) {
+                createIssueResult = searchIssueRes[0];
+                const isReplace = await vscode.window.showInformationMessage(
+                  `远端已经存在改分支的 Issue，是否替换？`,
+                  "确定",
+                  "取消"
+                );
+                if (isReplace) {
+                  // 如果是替换，则删除远端 issue
+                  await deleteGitlabIssue({
+                    project_id: data.value.project_id,
+                    issueId: createIssueResult.iid,
+                  });
+                }
+              }
+              // 创建新的 issue
+              createIssueResult = await createIssueService({
                 ...data.value,
                 name: "Hotfix/" + data.value.name,
               } as ICreateFixedModel);
@@ -216,11 +243,32 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
                 throw new Error("创建新 Issue 失败");
               }
               // 3. gitlab 创建一个 MR，并且关联刚创建的 Issue
-              const createMergeRequestResult =
-                await createFixedMergeRequestService({
-                  ...data.value,
-                  issueId: createIssueResult.iid,
-                });
+              let createMergeRequestResult;
+              const searchMergeRequestRes = await searchGitlabMergeRequest({
+                project_id: data.value.project_id,
+                search: encodeURIComponent(newBranchName),
+              });
+              if (searchMergeRequestRes.length) {
+                createMergeRequestResult = searchMergeRequestRes[0];
+                createIssueResult = searchIssueRes[0];
+                const isReplace = await vscode.window.showInformationMessage(
+                  `远端已经存在改分支的 MergeRequest，是否替换？`,
+                  "确定",
+                  "取消"
+                );
+                if (isReplace) {
+                  // 如果是替换，则删除远端分 merge_request
+                  deleteGitlabMergeRequest({
+                    project_id: data.value.project_id,
+                    merge_request_id: createMergeRequestResult.iid,
+                  });
+                }
+              }
+              // 创建新的 merge_request
+              createMergeRequestResult = await createFixedMergeRequestService({
+                ...data.value,
+                issueId: createIssueResult.iid,
+              });
               if (!createMergeRequestResult) {
                 throw new Error("创建新 Merge_Request 失败");
               }
@@ -250,30 +298,9 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
           try {
             result = await finishedFixedBranch(data.value);
             if (!result) {
-              throw new Error("分支创建失败");
+              throw new Error("完成创建失败");
             }
 
-
-            
-            // 2. 如果修复的是 master 分支
-            if (data.value.fixedBranch === "master") {
-              const createIssueResult = await createIssueService({
-                ...data.value,
-                name: "Hotfix/" + data.value.name,
-              } as ICreateFixedModel);
-              if (!createIssueResult) {
-                throw new Error("创建新 Issue 失败");
-              }
-              // 3. gitlab 创建一个 MR，并且关联刚创建的 Issue
-              const createMergeRequestResult =
-                await createFixedMergeRequestService({
-                  ...data.value,
-                  issueId: createIssueResult.iid,
-                });
-              if (!createMergeRequestResult) {
-                throw new Error("创建新 Merge_Request 失败");
-              }
-            }
           } catch (error) {
             console.log("createFixed error: ", error);
             result = false;

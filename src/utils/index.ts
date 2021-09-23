@@ -3,12 +3,16 @@ import { fstat, readFileSync } from "fs";
 import path = require("path");
 import * as vscode from "vscode";
 import {
+  deleteGitlabIssue,
+  deleteGitlabMergeRequest,
   finishProjectFeature,
   getFixBranchesList,
   getProjectInfoByNameService,
   getProjectMergeRequestByUser,
   ICreateFeatureModel,
   IFinishFeature,
+  searchGitlabIssue,
+  searchGitlabMergeRequest,
 } from "./request-gitlab-api";
 
 async function getCurrentWorkspace() {
@@ -57,10 +61,12 @@ export async function getCurrentProjectInfo(): Promise<IProjectInfo> {
         encoding: "utf-8",
       }
     );
+    const pkg = JSON.parse(pkgJson);
+    console.log("pkgJson.gitlab", pkg);
     gitlabProjectInfo = await getProjectInfoByNameService(
-      currentWorkSpace.name
+      (pkg.gitlab && pkg.gitlab.name) || currentWorkSpace.name
     );
-    pkg = JSON.parse(pkgJson);
+    pkg;
   }
   console.log("gitlabProjectInfo", gitlabProjectInfo);
 
@@ -94,12 +100,13 @@ async function checkBranchIsExist(
   currentWorkSpace: vscode.WorkspaceFolder
 ) {
   try {
-    const gitStatusBuffer = execSync(`git branch ${branchName}`, {
+    // const gitStatusBuffer = execSync(`git checkout -b ${branchName}`, {
+    const gitStatusBuffer = execSync(`git branch -a`, {
       cwd: currentWorkSpace.uri.fsPath,
     });
     const gitStatusStr = gitStatusBuffer.toString("utf-8");
-    const cleanKeyWord = "already exists";
-    if (gitStatusStr.includes(cleanKeyWord)) {
+    // const cleanKeyWord = branchName;
+    if (gitStatusStr.includes(branchName)) {
       return true;
     } else {
       return false;
@@ -112,11 +119,12 @@ async function checkBranchIsExist(
 
 async function askForDeleteExistBranch(
   newBranchName: string,
+  project_id: number,
   currentWorkSpace: vscode.WorkspaceFolder
 ) {
   let isCover = await vscode.window
     .showInformationMessage(
-      `当前工作空间已经存在 ${newBranchName} 分支，是否覆盖该分支？`,
+      `当前工作空间已经存在 ${newBranchName} 分支，是否删除该分支？`,
       "确定",
       "取消"
     )
@@ -131,6 +139,20 @@ async function askForDeleteExistBranch(
     execSync(`git checkout master && git branch -D ${newBranchName}`, {
       cwd: currentWorkSpace.uri.fsPath,
     });
+    // 检查远程是否存在分支
+    const gitStatusBuffer = execSync(
+      `git fetch origin --prune && git branch -a`,
+      {
+        cwd: currentWorkSpace.uri.fsPath,
+      }
+    );
+    const gitStatusStr = gitStatusBuffer.toString("utf-8");
+    if (gitStatusStr.includes(newBranchName)) {
+      // 删除远程分支
+      execSync(`git push -d origin ${newBranchName}`, {
+        cwd: currentWorkSpace.uri.fsPath,
+      });
+    }
     return true;
   }
 }
@@ -148,11 +170,15 @@ export async function createLocalFeatureGitBranch(params: ICreateFeatureModel) {
           "当前工作空间存在未处理的文件，请处理并提交后再尝试操作"
         );
       }
-      // 2. 检查本地是否已经存在改 feature 分支
+      // 2. 本地从 master 分支中创建一个 Feature 分支
+      execSync(`git checkout master && git fetch origin master`, {
+        cwd: currentWorkSpace.uri.fsPath,
+      });
       const isExist = await checkBranchIsExist(newBranchName, currentWorkSpace);
       if (isExist) {
         const isAllowDelete = await askForDeleteExistBranch(
           newBranchName,
+          params.project_id,
           currentWorkSpace
         );
         if (!isAllowDelete) {
@@ -160,11 +186,11 @@ export async function createLocalFeatureGitBranch(params: ICreateFeatureModel) {
           return false;
         }
       }
-      // 3. 本地从 master 分支中创建一个 Feature 分支
+      // 3.
       // 4. 切换到新创建的分支
       // 5. 把新创建的分支推送到远程仓库
       exec(
-        `git checkout master && git branch ${newBranchName} && git checkout ${newBranchName} && git push --set-upstream origin ${newBranchName}`,
+        `git branch ${newBranchName} && git checkout ${newBranchName} && git push --set-upstream origin ${newBranchName}`,
         {
           cwd: currentWorkSpace.uri.fsPath,
         }
@@ -237,6 +263,7 @@ export async function createFixedBranch(params: ICreateFixedModel) {
         params.fixedBranch === "master"
       );
       if (params.fixedBranch === "master") {
+        // hotfix/[修复描述]_[姓名]([修复分支名称])
         const newBranchName = `hotfix/${params.name}`;
         // 如果当前的修复是在 master 分支上
         // 2. 检查本地是否已经存在该 hotfix 分支
@@ -247,6 +274,7 @@ export async function createFixedBranch(params: ICreateFixedModel) {
         if (isExist) {
           const isAllowDelete = await askForDeleteExistBranch(
             newBranchName,
+            params.project_id,
             currentWorkSpace
           );
           if (!isAllowDelete) {
@@ -258,20 +286,27 @@ export async function createFixedBranch(params: ICreateFixedModel) {
         // 4. 本地从 master 分支中创建一个 hotfix 分支
         // 5. 切换到新创建的分支
         // 6. 把新创建的分支推送到远程仓库
-        console.log(
-          `git command: git checkout ${params.fixedBranch} && git pull origin ${params.fixedBranch} && git branch ${newBranchName} && git checkout ${newBranchName}`
-        );
 
-        exec(
-          `git checkout master && git pull origin ${params.fixedBranch} && git branch ${newBranchName} && git checkout ${newBranchName} && git push --set-upstream origin ${newBranchName}`,
+        console.log(
+          `git checkout master && git fetch origin ${params.fixedBranch}`
+        );
+        execSync(
+          `git checkout master && git fetch origin ${params.fixedBranch}`,
           {
             cwd: currentWorkSpace.uri.fsPath,
           }
         );
+        execSync(
+          `git branch ${newBranchName} && git checkout ${newBranchName}`,
+          {
+            cwd: currentWorkSpace.uri.fsPath,
+          }
+        );
+        execSync(`git push --set-upstream origin ${newBranchName}`, {
+          cwd: currentWorkSpace.uri.fsPath,
+        });
       } else {
-        const newBranchName = `hotfix/${
-          params.name
-        }(${params.fixedBranch.replace("feature/", "")})`;
+        const newBranchName = `hotfix/${params.name}`;
 
         // 如果当前的修复是在 feature 分支上
         // 2. 检查本地是否已经存在改 feature 分支
@@ -282,6 +317,7 @@ export async function createFixedBranch(params: ICreateFixedModel) {
         if (isExist) {
           const isAllowDelete = await askForDeleteExistBranch(
             newBranchName,
+            params.project_id,
             currentWorkSpace
           );
           if (!isAllowDelete) {
@@ -355,7 +391,7 @@ export async function getFixedBranches(
 
 interface IFinishFixed {
   merge_request_id: number;
-  merge_request_title: string;
+  fixedBranch: string;
   project_id: number;
   source_branch: string;
   is_delete_local_branch: boolean;
@@ -363,14 +399,22 @@ interface IFinishFixed {
 
 export async function finishedFixedBranch(params: IFinishFixed) {
   try {
-    if (params.merge_request_id) {
-      // 如果修复的是否是 master 分支，则去除 gitlab 上的 merge_request 的草稿状态
-      const finishResult = await finishProjectFeature(params);
+    debugger
+    if (params.source_branch === "master") {
+      if (params.merge_request_id) {
+        // 如果修复的是否是 master 分支，则去除 gitlab 上的 merge_request 的草稿状态
+        const finishResult = await finishProjectFeature(params);
+      } else {
+        vscode.window.showErrorMessage(
+          "远端未找到对应的修复分支：" + params.fixedBranch
+        );
+        // return false;
+      }
     } else {
       // 如果修复的是 feature 分支，则在本地把修复分支合并到功能分支
-      const targeBranch =
-      // execSync(`git`)
+      execSync(`git checkout ${params.source_branch} && git merge ${params.fixedBranch} -ff`)
       // 并且检查 gitlab 上是否有对应的修复分支，如果有则删除远程分支
+      
     }
     return true;
   } catch (error) {

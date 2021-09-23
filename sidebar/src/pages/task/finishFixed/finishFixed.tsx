@@ -6,7 +6,7 @@ import { history } from '@/.umi/core/history';
 const { Option } = Select;
 
 interface IFinishFixedFormData {
-  merge_request_title: string;
+  fixedBranch: string;
   is_delete_local_branch: boolean;
 }
 
@@ -84,18 +84,31 @@ export default function finishFixed() {
 
   const onFinish = (values: IFinishFixedFormData) => {
     console.log(values);
-    const merge_request_title = values.merge_request_title;
+    const fixedBranch = values.fixedBranch;
+    let matchRes = fixedBranch.match(/{(\w+)}/);
+    let source_branch = '';
+    if (matchRes) {
+      source_branch = matchRes[1];
+    }
     const selectHotfixed = hotfixedList.find((item) => {
-      return item.title === merge_request_title;
+      return item.title === fixedBranch;
     });
-    tsvscode.postMessage({
-      command: 'finishFixed',
-      value: {
-        ...values,
-        project_id: window.projectInfo.gitlabProjectInfo.id,
-        merge_request_id: selectHotfixed?.iid,
-      },
-    });
+    if (source_branch) {
+      tsvscode.postMessage({
+        command: 'finishFixed',
+        value: {
+          ...values,
+          project_id: window.projectInfo.gitlabProjectInfo.id,
+          merge_request_id: selectHotfixed?.iid,
+          source_branch,
+        },
+      });
+    } else {
+      tsvscode.postMessage({
+        command: 'finishFixed',
+        value: '请选择正确的修复分支，格式：***_username_{source_branch',
+      });
+    }
   };
 
   const onCancel = () => {
@@ -132,19 +145,21 @@ export default function finishFixed() {
       >
         <Form.Item
           className={styles['form-item']}
-          name="merge_request_title"
+          name="fixedBranch"
           label="完成的修复"
           rules={[{ required: true, message: '完成的的修复必填' }]}
           valuePropName="checked"
         >
           <Select>
-            {hotfixedList.map((item: any, index: number) => {
-              return (
-                <Option value={item.title} key={index}>
-                  {item.title}
-                </Option>
-              );
-            })}
+            {hotfixedList
+              .filter((item: any) => item.title.indexOf(userInfo.username) > -1)
+              .map((item: any, index: number) => {
+                return (
+                  <Option value={item.title} key={index}>
+                    {item.title}
+                  </Option>
+                );
+              })}
           </Select>
         </Form.Item>
         <Form.Item
