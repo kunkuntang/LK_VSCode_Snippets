@@ -176,7 +176,7 @@ export class ModelCreator {
       Object.keys(data).forEach(key => {
         if (typeof data[key] === "number") {
           tempClassArr.push(`    @DataMapper('${key}')`);
-          tempClassArr.push(`    ${key}: number = Number.MAX_SAFE_INTEGER;`);
+          tempClassArr.push(`    ${key}: number | undefined = undefined;`);
           tempClassArr.push('');
         }
         if (typeof data[key] === "string") {
@@ -200,7 +200,7 @@ export class ModelCreator {
             tempClassArr.push(`    ${key} = null;`);
             tempClassArr.push('');
           } else if (Array.isArray(data[key])) {
-            tempClassArr.push(`    @DataMapper({ clazz: ${upperFirstCase(key)}M, name: '${key}' })`);
+            tempClassArr.push(`    @DataMapper('${key}')`);
             // 如果不是一个空数组
             if (data[key][0] !== undefined) {
               tempClassArr.push(`    ${key}:${upperFirstCase(key)}M[] = [];`);
