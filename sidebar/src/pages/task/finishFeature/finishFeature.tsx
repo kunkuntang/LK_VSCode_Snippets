@@ -6,7 +6,7 @@ import { history } from '@/.umi/core/history';
 const { Option } = Select;
 
 interface IFinishFeatureFormData {
-  merge_request_id: number;
+  feature_branch_id: number;
   is_delete_local_branch: boolean;
 }
 
@@ -87,16 +87,16 @@ export default function FinishFeature() {
 
   const onFinish = (values: IFinishFeatureFormData) => {
     console.log(values);
-    const merge_request_id = values.merge_request_id;
+    const feature_branch_id = values.feature_branch_id;
     const selectMergeRequest = mergeRequestList.find((item) => {
-      return item.iid === merge_request_id;
+      return item.iid === feature_branch_id;
     });
     tsvscode.postMessage({
       command: 'finishFeature',
       value: {
         ...values,
         project_id: window.projectInfo.gitlabProjectInfo.id,
-        merge_request_title: selectMergeRequest?.title,
+        finishedBranch: selectMergeRequest?.title,
         source_branch: selectMergeRequest?.source_branch,
       },
     });
@@ -136,7 +136,7 @@ export default function FinishFeature() {
       >
         <Form.Item
           className={styles['form-item']}
-          name="merge_request_id"
+          name="feature_branch_id"
           label="完成的功能"
           rules={[{ required: true, message: '完成的功能必填' }]}
           valuePropName="checked"

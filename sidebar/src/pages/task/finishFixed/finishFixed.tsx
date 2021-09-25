@@ -99,7 +99,7 @@ export default function finishFixed() {
         value: {
           ...values,
           project_id: window.projectInfo.gitlabProjectInfo.id,
-          merge_request_id: selectHotfixed?.iid,
+          hotfix_branch_id: selectHotfixed?.iid,
           source_branch,
         },
       });

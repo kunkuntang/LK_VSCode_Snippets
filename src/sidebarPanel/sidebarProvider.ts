@@ -164,8 +164,8 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             const { is_delete_local_branch, source_branch, ...value } =
               data.value as {
                 project_id: number;
-                merge_request_id: number;
-                fixedBranch: string;
+                feature_branch_id: number;
+                finishedBranch: string;
                 is_delete_local_branch: boolean;
                 source_branch: string;
               };

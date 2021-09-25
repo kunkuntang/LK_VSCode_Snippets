@@ -61,7 +61,7 @@ export async function getCurrentProjectInfo(): Promise<IProjectInfo> {
         encoding: "utf-8",
       }
     );
-    const pkg = JSON.parse(pkgJson);
+    pkg = JSON.parse(pkgJson);
     console.log("pkgJson.gitlab", pkg);
     gitlabProjectInfo = await getProjectInfoByNameService(
       (pkg.gitlab && pkg.gitlab.name) || currentWorkSpace.name
@@ -392,7 +392,7 @@ export async function getFixedBranches(
 }
 
 interface IFinishFixed {
-  merge_request_id: number;
+  hotfix_branch_id: number;
   fixedBranch: string;
   project_id: number;
   source_branch: string;
@@ -402,9 +402,14 @@ interface IFinishFixed {
 export async function finishedFixedBranch(params: IFinishFixed) {
   try {
     if (params.source_branch === "master") {
-      if (params.merge_request_id) {
+      if (params.hotfix_branch_id) {
         // 如果修复的是否是 master 分支，则去除 gitlab 上的 merge_request 的草稿状态
-        const finishResult = await finishProjectFeature(params);
+        const { fixedBranch: finishedBranch, hotfix_branch_id: feature_branch_id, ...restParams } = params
+        const finishResult = await finishProjectFeature({
+          ...restParams,
+          feature_branch_id,
+          finishedBranch,
+        });
       } else {
         vscode.window.showErrorMessage(
           "远端未找到对应的修复分支：" + params.fixedBranch
