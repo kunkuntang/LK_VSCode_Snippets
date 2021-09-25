@@ -134,10 +134,10 @@ function createMergeRequestService(
         target_branch: target_branch,
         title: "Draft: " + mergeRequestTitle,
         assignee_id: 10,
-        description: [params.tapd, `Closed #${params.issueId}`].join("\n\n"),
+        description: [params.tapd, `Closes #${params.issueId}`].join("\n\n"),
         milestone_id: params.milestone_id,
         squash: true,
-        remove_source_branch: false,
+        remove_source_branch: true,
       },
       {
         headers: {
@@ -197,17 +197,17 @@ export function getProjectMergeRequestByUser(params: IGetProjectMRByUser) {
 
 export interface IFinishFeature {
   project_id: number;
-  merge_request_id: number;
-  fixedBranch: string;
+  feature_branch_id: number;
+  finishedBranch: string;
 }
 
 export function finishProjectFeature(params: IFinishFeature) {
   return request
     .put(
-      `/projects/${params.project_id}/merge_requests/${params.merge_request_id}`,
+      `/projects/${params.project_id}/merge_requests/${params.feature_branch_id}`,
       {
         id: params.project_id,
-        title: params.fixedBranch.replace("Draft: ", ""),
+        title: params.finishedBranch.replace("Draft: ", ""),
       },
       {
         headers: {
