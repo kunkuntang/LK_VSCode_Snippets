@@ -1,8 +1,8 @@
 import { history } from '@/.umi/core/history';
 import Avatar from '@/pages/components/Avatar';
+import { getCurrentMileStonesHooks } from '@/pages/hooks/hooks';
 import { Form, Input, Button, Select } from 'antd';
 import React from 'react';
-import { useState } from 'react';
 import { useEffect } from 'react';
 import styles from './createFeature.less';
 
@@ -22,34 +22,6 @@ const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },
 };
-
-function getCurrentMileStonesHooks() {
-  const [mileStonesList, setMileStonesList] = useState([]);
-
-  function _getMileStonesList() {
-    tsvscode.postMessage({
-      command: 'getCurrentMileStones',
-    });
-  }
-
-  function _setMileStonesList(event: MessageEvent<PostMessageParams>) {
-    const data = event.data;
-    if (data.command === 'getCurrentMileStones') {
-      if (data.value) {
-        console.log('data.value', data.value);
-        setMileStonesList(data.value);
-      } else {
-        setMileStonesList([]);
-      }
-    }
-  }
-
-  return {
-    mileStonesList,
-    getMileStonesList: _getMileStonesList,
-    setMileStonesList: _setMileStonesList,
-  };
-}
 
 function createFeatureHooks() {}
 
@@ -85,6 +57,7 @@ export default function CreateFeature() {
       command: 'createFeature',
       value: {
         ...values,
+        name: values.name + `_${userInfo.username}`,
         project_id: window.projectInfo.gitlabProjectInfo.id,
       },
     });
@@ -100,9 +73,9 @@ export default function CreateFeature() {
 
       <Avatar userInfo={userInfo}></Avatar>
 
-      <div style={{ color: '#fff' }}>
-        <h2 style={{ color: '#fff' }}>当前项目</h2>
-        <h3 style={{ color: '#fff' }}>
+      <div className={styles.text}>
+        <h2 className={styles.text}>当前项目</h2>
+        <h3 className={styles.text}>
           {window.projectInfo && (
             <a href={window.projectInfo.gitlabProjectInfo.web_url || ''}>
               {window.projectInfo.workspace?.name ||
@@ -113,8 +86,8 @@ export default function CreateFeature() {
         </h3>
       </div>
 
-      <div style={{ color: '#fff' }}>
-        <h2 style={{ color: '#fff' }}>创建新功能</h2>
+      <div className={styles.text}>
+        <h2 className={styles.text}>创建新功能</h2>
         <ul>
           <li>在本地和远端创建同名的 feature 分支</li>
           <li>
@@ -163,7 +136,7 @@ export default function CreateFeature() {
           label="关联tapd信息"
           rules={[{ required: true, message: '关联tapd信息必填' }]}
         >
-          <Input />
+          <Input.TextArea className={styles['form-textarea']} />
         </Form.Item>
         <Form.Item style={{ marginTop: '15px' }}>
           <button className={styles['form-button']} type="submit">

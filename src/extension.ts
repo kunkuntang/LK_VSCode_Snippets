@@ -6,6 +6,7 @@ import { showInputBox } from "./baseInput";
 import { LkDevOpsManager } from "./devOpsPanel/devOpsManager";
 import { DevOpsPanel } from "./devOpsPanel/devOpsPanel";
 import { SidebarProvider } from "./sidebarPanel/sidebarProvider";
+import { getFixedBranches } from "./utils";
 
 const lkDevOpsManager = new LkDevOpsManager();
 
@@ -86,11 +87,13 @@ export function activate(context: vscode.ExtensionContext) {
 
   let sidebarPanel = vscode.window.registerWebviewViewProvider(
     "lk-gitlab-sidebar",
-    new SidebarProvider(context.extensionUri)
+    new SidebarProvider(context.extensionUri),
+    {
+      webviewOptions: {
+        retainContextWhenHidden: true,
+      }
+    }
   );
-
-  console.log("workspace", vscode.workspace.workspaceFolders);
-  console.log("env", vscode.env);
 
   context.subscriptions.push(
     vscode.commands.registerCommand("LkGitlabTools.refresh", async () => {

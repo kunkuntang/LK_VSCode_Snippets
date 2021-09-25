@@ -57,7 +57,7 @@
       "",
       "@Component",
       "export class ${1:表格名称}TableColumnsConfig extends Vue {",
-      "  getConfig(that?: ${4:引用的Vue类实例}): Partial<Column>[] {",
+      "  getConfig(that?: ${4:引用的Vue类实例}): Partial<LkTableColumn>[] {",
       "    return [",
       "      {",
       "        title: \"${2}\",",

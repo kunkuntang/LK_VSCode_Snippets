@@ -3,19 +3,19 @@ import styles from './login.less';
 
 interface IProps {
   accessToken: string;
-  setAccessToken: (accessToken: string) => void;
+  getAccessToken: (accessToken: string) => void;
 }
 
 export default function Login(props: IProps) {
-  const { accessToken, setAccessToken } = props;
+  const { accessToken, getAccessToken } = props;
   let userAccessToken = accessToken || '';
 
   const hanldeSetAccessToken = function () {
     console.log('user input accessToken', userAccessToken);
     if (userAccessToken) {
-      setAccessToken(userAccessToken);
+      getAccessToken(userAccessToken);
     } else {
-      vscode.postMessage({
+      tsvscode.postMessage({
         command: 'onError',
         value: '请输入 access_token ',
       });
