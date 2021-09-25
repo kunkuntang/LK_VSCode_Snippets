@@ -1,227 +1,227 @@
 {
-  "Create HL Text FormField": {
-    "prefix": "HLCreateTextFormField",
-    "body": [
-      "textComponent:IBaseFormFields<string>= {",
-      "    value: '${1}',",
-      "}"
-    ],
-    "description": "Create HL Text FormField"
-  },
-
-  "Create LK Input FormField": {
+  "LK Create Input Form Field": {
     "prefix": "LKCreateInputFormField",
     "body": [
-      "/** ${1} */",
+      "/** ${1} **/",
       "lkFormItemUtils.renderInputFormItem(",
       "  {",
-      "    label: '${1}'",
+      "    label: '${1:表单项显示名称}',",
       "  },",
       "  new LkInputConfig({",
-      "    placeholder: '${1}'",
+      "    placeholder: '请输入${1}'",
       "  }),",
       "  {",
-      "    name: '${2}'",
+      "    name: '${2:表单项目数据名称}',",
       "    rules: [",
-      "      { required: true, message: '${1}必填' }",
+      "      { required: ${3:true}, message: '${1}不能为空', whitespace: ${4:true} }",
       "    ]",
-      " }",
+      "  }",
       "),"
     ],
-    "description": "Create LK Input FormField"
+    "description": "LK Create Input Form Field"
   },
 
-  "Create HL Switch FormField": {
-    "prefix": "HLCreateSwitchFormField",
+  "LK Create Switch Form Field": {
+    "prefix": "LKCreateSwitchFormField",
     "body": [
-      "/** ${4} */",
-      "@FormRuleProperty({",
-      "    required: ${1|true,false|},",
-      "    name: '${2:name}',",
-      "    error: '${3}',",
-      "    desc: '${4:description}',",
-      "    type: 'boolean',",
-      "})",
-      "${2}:IBaseFormFields<boolean>= {",
-      "    value: ${5|false,true|},",
-      "}"
+      "/** ${1} **/",
+      "lkFormItemUtils.renderSwitchFormItem(",
+      "  {",
+      "    label: '${1:表单项显示名称}',",
+      "  },",
+      "  new LkSwitchConfig({}),",
+      "  {",
+      "    name: '${2:表单项目数据名称}',",
+      "    rules: [",
+      "      { required: ${3:true}, message: '${1}不能为空' }",
+      "    ]",
+      "  }",
+      "),"
     ],
-    "description": "Create HL Switch FormField"
+    "description": "LK Create Switch Form Field"
   },
 
-  "Create HL Number Input FormField": {
-    "prefix": "HLCreateNumberInputFormField",
+  "LK Create Input Number Form Field": {
+    "prefix": "LKCreateInputNumberFormField",
     "body": [
-      "/** ${4} */",
-      "@FormRuleProperty({",
-      "    required: ${1|true,false|},",
-      "    name: '${2:name}',",
-      "    error: '${3}',",
-      "    desc: '${4:description}',",
-      "    type: 'boolean',",
-      "    regex: commonRegex.NUMBER,",
-      "})",
-      "${2}:IBaseFormFields<string>= {",
-      "    value: '${5}',",
-      "}"
+      "/** ${1} **/",
+      "lkFormItemUtils.renderInputNumberFormItem(",
+      "  {",
+      "    label: '${1:表单项显示名称}',",
+      "  },",
+      "  new LkInputNumberConfig({",
+      "    placeholder: '请输入${1}'",
+      "  }),",
+      "  {",
+      "    name: '${2:表单项目数据名称}',",
+      "    rules: [",
+      "      { required: ${3:true}, message: '${1}不能为空', whitespace: ${4:true} }",
+      "    ]",
+      "  }",
+      "),"
     ],
-    "description": "Create HL Number Input FormField"
+    "description": "LK Create Input Number Form Field"
   },
 
-  "Create HL Multiple Select FormField": {
-    "prefix": "HLCreateMultipleSelectFormField",
+  "LK Create Select Form Field": {
+    "prefix": "LKCreateSelectFormField",
     "body": [
-      "/** ${4} */",
-      "@FormRuleProperty({",
-      "    required: ${1|true,false|},",
-      "    name: '${2:name}',",
-      "    error: '${3}',",
-      "    desc: '${4:description}',",
-      "    type: 'array',",
-      "})",
-      "${2}:IBaseFormFields<Array<string>> = {",
-      "    value: [],",
-      "}"
+      "/** ${1} **/",
+      "lkFormItemUtils.renderSelectFormItem(",
+      "  {",
+      "    label: '${1:表单项显示名称}',",
+      "  },",
+      "  new LkSelectConfig({",
+      "    options: [",
+      "      { label: '', value: '' }",
+      "    ]",
+      "  }),",
+      "  {",
+      "    name: '${2:表单项目数据名称}',",
+      "    rules: [",
+      "      { required: ${3:true}, message: '${1}不能为空' }",
+      "    ]",
+      "  }",
+      "),"
     ],
-    "description": "Create HL Multiple Select FormField"
+    "description": "LK Create Select Form Field"
   },
 
-  "Create HL Select Page FormField": {
-    "prefix": "HLCreateSelectPageFormField",
+  "LK Create DatePicker Form Field": {
+    "prefix": "LKCreateDatePickerFormField",
     "body": [
-      "/** ${4} */",
-      "@FormRuleProperty({",
-      "    required: ${1|true,false|},",
-      "    name: '${2:name}',",
-      "    error: '${3}',",
-      "    desc: '${4:description}',",
-      "    type: 'object',",
-      "})",
-      "${2}:IBaseFormFields<{ key: string; label: string; title: string;keyValue:string}> = {",
-      "    value:{ key: '', label: '', title: '', keyValue: '' },",
-      "}"
+      "/** ${1} **/",
+      "lkFormItemUtils.renderDatePickerFormItem(",
+      "  {",
+      "    label: '${1:表单项显示名称}',",
+      "  },",
+      "  new LkDatePickerConfig({",
+      "    placeholder: '请输入${1}'",
+      "  }),",
+      "  {",
+      "    name: '${2:表单项目数据名称}',",
+      "    rules: [",
+      "      { required: ${3:true}, message: '${1}不能为空' }",
+      "    ]",
+      "  }",
+      "),"
     ],
-    "description": "Create HL Select Page FormField"
+    "description": "LK Create DatePicker Form Field"
   },
 
-  "Create HL DatePicker FormField": {
-    "prefix": "HLCreateDatePickerFormField",
+  "LK Create RadioGroup Form Field": {
+    "prefix": "LKCreateRadioGroupFormField",
     "body": [
-      "/** ${4} */",
-      "@FormRuleProperty({",
-      "    required: ${1|true,false|},",
-      "    name: '${2:name}',",
-      "    error: '${3}',",
-      "    desc: '${4:description}',",
-      "    type: 'object',",
-      "})",
-      "${2}:IBaseFormFields<moment.Moment> = {",
-      "    value: null,",
-      "    submitBeforeTransform: (value) => {",
-      "        $BLOCK_COMMENT_START 日期时间类组件的 value 改为 moment 类型，所以在提交前需要预处理。 $BLOCK_COMMENT_END",
-      "        if (value) {",
-      "            return moment(value).format('YYYY-MM-DD HH:mm:ss');",
-      "        }",
-      "        return ''",
-      "    },",
-      "}"
+      "/** ${1} **/",
+      "lkFormItemUtils.renderRadioGroupFormItem(",
+      "  {",
+      "    label: '${1:表单项显示名称}',",
+      "  },",
+      "  new LkRadioGroupConfig({",
+      "    options: [",
+      "      { label: '', value: '' }",
+      "    ]",
+      "  }),",
+      "  {",
+      "    name: '${2:表单项目数据名称}',",
+      "    rules: [",
+      "      { required: ${3:true}, message: '${1}不能为空' }",
+      "    ]",
+      "  }",
+      "),"
     ],
-    "description": "Create HL DatePicker FormField"
+    "description": "LK Create RadioGroup Form Field"
   },
 
-  "Create HL Upload FormField": {
-    "prefix": "HLCreateUploadFormField",
+  "LK Create CheckboxGroup Form Field": {
+    "prefix": "LKCreateCheckboxGroupFormField",
     "body": [
-      "/** ${4} */",
-      "@FormRuleProperty({",
-      "    required: ${1|true,false|},",
-      "    name: '${2:name}',",
-      "    error: '${3}',",
-      "    desc: '${4:description}',",
-      "    type: 'object',",
-      "})",
-      "${2}:IBaseFormFields<UploadChangeParam> = {",
-      "    value: null,",
-      "    submitBeforeTransform: (value) => {",
-      "        $BLOCK_COMMENT_START 随便选取的数据，在真实业务中，取附件服务端存储网络地址。 $BLOCK_COMMENT_END",
-      "        if (value) {",
-      "            return ${5:value.file.uid};",
-      "        }",
-      "        return ''",
-      "    },",
-      "}"
+      "/** ${1} **/",
+      "lkFormItemUtils.renderCheckboxGroupFormItem(",
+      "  {",
+      "    label: '${1:表单项显示名称}',",
+      "  },",
+      "  new LkCheckboxGroupConfig({",
+      "    options: [",
+      "      { label: '', value: '' }",
+      "    ]",
+      "  }),",
+      "  {",
+      "    name: '${2:表单项目数据名称}',",
+      "    rules: [",
+      "      { required: ${3:true}, message: '${1}不能为空' }",
+      "    ]",
+      "  }",
+      "),"
     ],
-    "description": "Create HL Upload FormField"
+    "description": "LK Create CheckboxGroup Form Field"
   },
 
-  "Create HL Hidden FormField": {
-    "prefix": "HLCreateHiddenFormField",
+  "LK Create TextArea Form Field": {
+    "prefix": "LKCreateTextAreaFormField",
     "body": [
-      "/**",
-      " * 这是不在UI表单上显示但又需要提交到后台接口的表单字段",
-      " */",
-      "${1:customRender}:IBaseFormFields<${2:valueEntity}, {}, ${3:FormFieldClass}>= {",
-      "    value: '${4}',",
-      "    submitBeforeTransform: (value, formValue) => {",
-      "        $BLOCK_COMMENT_START 在这里对表单数据进行处理 $BLOCK_COMMENT_END",
-      "        let newValue = value;",
-      "        return newValue;",
-      "    },",
-      "}"
+      "/** ${1} **/",
+      "lkFormItemUtils.renderTextAreaFormItem(",
+      "  {",
+      "    label: '${1:表单项显示名称}',",
+      "  },",
+      "  new LkTextAreaConfig({",
+      "    placeholder: '请输入${1}'",
+      "  }),",
+      "  {",
+      "    name: '${2:表单项目数据名称}',",
+      "    rules: [",
+      "      { required: ${3:true}, message: '${1}不能为空' }",
+      "    ]",
+      "  }",
+      "),"
     ],
-    "description": "you can handle the formdata which don't show in the form with the submitBeforeTransform propertiy"
+    "description": "LK Create TextArea Form Field"
   },
 
-  "Create HL Extra FormField": {
-    "prefix": "HLCreateExtraFormField",
+  "LK Create TimePicker Form Field": {
+    "prefix": "LKCreateTimePickerFormField",
     "body": [
-      "/**",
-      " * 这是在UI表单上显示但又不需要提交到后台接口的表单字段",
-      " */",
-      "@FormRuleProperty({",
-      "    required: ${1|true,false|},",
-      "    name: '${2:name}',",
-      "    error: '${3}',",
-      "    desc: '${4:description}',",
-      "    type: 'string',",
-      "})",
-      "${2}:IBaseFormFields<string> = {",
-      "    value: '${5}',",
-      "    ignore: true,",
-      "}"
+      "/** ${1} **/",
+      "lkFormItemUtils.renderTimePickerFormItem(",
+      "  {",
+      "    label: '${1:表单项显示名称}',",
+      "  },",
+      "  new LkTimePickerConfig({",
+      "    placeholder: '请输入${1}'",
+      "  }),",
+      "  {",
+      "    name: '${2:表单项目数据名称}',",
+      "    rules: [",
+      "      { required: ${3:true}, message: '${1}不能为空' }",
+      "    ]",
+      "  }",
+      "),"
     ],
-    "description": "Create HL Extra FormField"
+    "description": "LK Create TimePicker Form Field"
   },
 
-  "Create HL Custom FormField": {
-    "prefix": "HLCreateCustomFormField",
+  "LK Create Cascader Form Field": {
+    "prefix": "LKCreateCascaderFormField",
     "body": [
-      "/** ${4} */",
-      "@FormRuleProperty({",
-      "    required: ${1|true,false|},",
-      "    name: '${2:name}',",
-      "    error: '${3}',",
-      "    desc: '${4:description}',",
-      "    type: '${5|string,object,array|}',",
-      "    $BLOCK_COMMENT_START regex:/^[1-9]\\d*$/, $BLOCK_COMMENT_END",
-      "    validator: (value: string, error, callback) => { ",
-      "        $BLOCK_COMMENT_START 自定义验证规则 $BLOCK_COMMENT_END",
-      "        callback();",
-      "    },",
-      "})",
-      "${2}:IBaseFormFields<${5}> = {",
-      "    value: '',",
-      "    requestParamKey: '',",
-      "    beforeDataToFormFields:<${6:T}> (value, resData: ${6}) => {",
-      "        $BLOCK_COMMENT_START 接口数据转换成表单数据前作的预处理 $BLOCK_COMMENT_END",
-      "        return value",
-      "    },",
-      "    submitBeforeTransform: (value) => {",
-      "        $BLOCK_COMMENT_START 提交前作的数据预处理 $BLOCK_COMMENT_END",
-      "        return value",
-      "    },",
-      "}"
+      "/** ${1} **/",
+      "lkFormItemUtils.renderCascaderFormItem(",
+      "  {",
+      "    label: '${1:表单项显示名称}',",
+      "  },",
+      "  new LkCascaderConfig({",
+      "    options: [",
+      "      { label: '', value: '' }",
+      "    ]",
+      "  }),",
+      "  {",
+      "    name: '${2:表单项目数据名称}',",
+      "    rules: [",
+      "      { required: ${3:true}, message: '${1}不能为空' }",
+      "    ]",
+      "  }",
+      "),"
     ],
-    "description": "Create HL Custom FormField"
+    "description": "LK Create Cascader Form Field"
   }
 }

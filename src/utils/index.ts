@@ -66,9 +66,11 @@ export async function getCurrentProjectInfo(): Promise<IProjectInfo> {
     gitlabProjectInfo = await getProjectInfoByNameService(
       (pkg.gitlab && pkg.gitlab.name) || currentWorkSpace.name
     );
-    pkg;
   }
   console.log("gitlabProjectInfo", gitlabProjectInfo);
+  if (Array.isArray(gitlabProjectInfo)) {
+    vscode.window.showErrorMessage('获取项目信息失败，请检查 package.json 里的 gitlab 字段配置')
+  }
 
   return {
     pkg,
@@ -399,7 +401,6 @@ interface IFinishFixed {
 
 export async function finishedFixedBranch(params: IFinishFixed) {
   try {
-    debugger
     if (params.source_branch === "master") {
       if (params.merge_request_id) {
         // 如果修复的是否是 master 分支，则去除 gitlab 上的 merge_request 的草稿状态
