@@ -222,8 +222,12 @@ export async function deleteLocalFeatureGitBranch(params: {
           "当前工作空间存在未处理的文件，请处理并提交后再尝试操作"
         );
       }
-      // 2. 切换到 master 分支
-      // 3. 删除功能分支
+      // 2. 切换到 feature 分支并且推送到远端
+      exec(`git checkout ${params.source_branch} && git push origin ${params.source_branch}`, {
+        cwd: currentWorkSpace.uri.fsPath,
+      });
+      // 3. 切换到 master 分支
+      // 4. 删除功能分支
       exec(`git checkout master && git branch -D ${params.source_branch}`, {
         cwd: currentWorkSpace.uri.fsPath,
       });
@@ -401,28 +405,42 @@ interface IFinishFixed {
 
 export async function finishedFixedBranch(params: IFinishFixed) {
   try {
-    if (params.source_branch === "master") {
-      if (params.hotfix_branch_id) {
-        // 如果修复的是否是 master 分支，则去除 gitlab 上的 merge_request 的草稿状态
-        const { fixedBranch: finishedBranch, hotfix_branch_id: feature_branch_id, ...restParams } = params
-        const finishResult = await finishProjectFeature({
-          ...restParams,
-          feature_branch_id,
-          finishedBranch,
-        });
+    let currentWorkSpace: vscode.WorkspaceFolder | null =
+    await getCurrentWorkspace();
+    if (currentWorkSpace) {
+      if (params.source_branch === "master") {
+        if (params.hotfix_branch_id) {
+          // 如果修复的是否是 master 分支，则去除 gitlab 上的 merge_request 的草稿状态
+          const { fixedBranch: finishedBranch, hotfix_branch_id: feature_branch_id, ...restParams } = params
+          const finishResult = await finishProjectFeature({
+            ...restParams,
+            feature_branch_id,
+            finishedBranch,
+          });
+        } else {
+          vscode.window.showErrorMessage(
+            "远端未找到对应的修复分支：" + params.fixedBranch
+          );
+          // return false;
+        }
       } else {
-        vscode.window.showErrorMessage(
-          "远端未找到对应的修复分支：" + params.fixedBranch
-        );
-        // return false;
+        // 如果修复的是 feature 分支，则在本地把修复分支合并到功能分支
+        execSync(`git checkout ${params.source_branch} && git merge ${params.fixedBranch} -ff`, {
+          cwd: currentWorkSpace.uri.fsPath,
+        });
+        // 并且检查 gitlab 上是否有对应的修复分支，如果有则删除远程分支
+        
       }
+
+      if (params.is_delete_local_branch) {
+        execSync(`git checkout master && git branch -D ${params.fixedBranch}`, {
+          cwd: currentWorkSpace.uri.fsPath,
+        });
+      }
+      return true;
     } else {
-      // 如果修复的是 feature 分支，则在本地把修复分支合并到功能分支
-      execSync(`git checkout ${params.source_branch} && git merge ${params.fixedBranch} -ff`)
-      // 并且检查 gitlab 上是否有对应的修复分支，如果有则删除远程分支
-      
+      return false;
     }
-    return true;
   } catch (error) {
     console.error("finishedFixedBranch err", error);
     return false;
